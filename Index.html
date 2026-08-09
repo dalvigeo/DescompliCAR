@@ -1,0 +1,1328 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>DescompliCAR | Ferramenta de Diagnóstico para Demarcação da Reserva Legal</title>
+<!-- versão 12: tela inicial + conclusões práticas de demarcação + padronização terminológica + ícones de contato -->
+<style>
+:root{
+  --bg:#f4f7f2;--card:#fff;--ink:#172019;--muted:#5f6b62;--line:#dce5dd;
+  --green:#2f6b3d;--greenDark:#245532;--greenSoft:#e8f2e9;--greenMid:#cfe2d2;
+  --blue:#315f79;--blueSoft:#eef6fa;--amber:#825713;--amberSoft:#fff5df;
+  --red:#843333;--redSoft:#fff0f0;--shadow:0 12px 36px rgba(24,48,28,.09);
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;max-width:100%;overflow-x:hidden}
+body{background:linear-gradient(180deg,#edf3ec 0,#f8faf7 56%,#f3f6f1 100%);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;-webkit-text-size-adjust:100%}
+button,input,select{font:inherit}
+button{touch-action:manipulation}
+a{color:var(--greenDark);font-weight:750;text-underline-offset:2px}
+.wrap{width:min(1080px,100%);margin:0 auto;padding:24px 16px 42px}
+.hero{margin:0 0 16px}
+.brand{display:flex;align-items:center;gap:14px;margin-bottom:9px}
+.logoMark{width:72px;height:72px;flex:0 0 72px;border-radius:16px;display:grid;place-items:center;overflow:hidden;background:#fff;border:1px solid var(--line);box-shadow:0 6px 18px rgba(24,48,28,.08)}
+.logoMark img{width:100%;height:100%;display:block;object-fit:contain}
+.eyebrow{font-size:11px;line-height:1.2;font-weight:900;letter-spacing:.11em;text-transform:uppercase;color:var(--green)}
+h1{font-size:clamp(29px,4.8vw,46px);line-height:1.03;letter-spacing:-.04em;margin:3px 0 4px}
+.brandSub{font-size:13px;line-height:1.35;font-weight:780;color:#465349;max-width:760px}
+.sub{max-width:850px;margin:10px 0 0;color:var(--muted);font-size:14px;line-height:1.52}
+.experimentalNotice{margin-top:13px;max-width:900px;border:1px solid #ead3a1;background:var(--amberSoft);border-radius:14px;padding:11px 13px;display:flex;gap:10px;align-items:flex-start}
+.experimentalNotice .noticeIcon{width:27px;height:27px;flex:0 0 27px;border-radius:50%;background:#f3dfb2;color:var(--amber);display:grid;place-items:center;font-weight:900;font-size:14px}
+.experimentalNotice p{margin:0;color:#5d4a27;font-size:12.5px;line-height:1.5}
+.experimentalNotice strong{color:#66470e}
+.pills{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.pill{border:1px solid #cfe0d1;background:#fbfdfb;color:#3c5140;padding:6px 9px;border-radius:999px;font-size:11.5px;font-weight:800}
+.appGrid{display:grid;grid-template-columns:minmax(0,1fr) 284px;gap:16px;align-items:start}
+.panel,.side{background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.progressWrap{padding:16px 20px 0}
+.progressLine{height:7px;border-radius:999px;background:#edf2ed;overflow:hidden}
+.progress{height:100%;width:0;background:var(--green);transition:width .2s ease}
+.progressMeta{display:flex;justify-content:space-between;gap:12px;margin-top:7px;color:var(--muted);font-size:11.5px}
+.mobileSummary{display:none;margin:12px 14px 0;border:1px solid var(--line);border-radius:14px;background:#fbfcfb;overflow:hidden}
+.mobileSummary summary{cursor:pointer;list-style:none;padding:12px 14px;font-size:13px;font-weight:850;color:#314237;min-height:44px;display:flex;align-items:center;justify-content:space-between}
+.mobileSummary summary::-webkit-details-marker{display:none}
+.mobileSummary summary::after{content:"＋";font-size:17px;color:var(--green)}
+.mobileSummary[open] summary::after{content:"−"}
+.mobileFacts{padding:0 14px 12px}
+.content{padding:25px 26px 28px;min-height:360px}
+.kicker{font-size:11.5px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:var(--green)}
+.question{font-size:clamp(21px,3.3vw,30px);line-height:1.15;font-weight:870;letter-spacing:-.025em;margin:7px 0 9px}
+.help{color:var(--muted);font-size:13.5px;line-height:1.55;max-width:760px}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+.answer{appearance:none;border:1px solid var(--line);border-radius:17px;background:#fff;min-height:88px;padding:16px;text-align:left;display:flex;gap:11px;align-items:flex-start;cursor:pointer;transition:transform .14s,border-color .14s,box-shadow .14s}
+.answer:hover,.answer:focus-visible{border-color:#9fc2a5;box-shadow:0 7px 20px rgba(27,56,32,.08);outline:none}
+.answer:active{transform:scale(.99)}
+.badge{width:35px;height:35px;border-radius:50%;background:var(--greenSoft);color:var(--green);display:grid;place-items:center;flex:0 0 auto;font-weight:900}
+.answer strong{display:block;font-size:16.5px;margin:1px 0 4px}.answer small{display:block;color:var(--muted);font-size:12.5px;line-height:1.4}
+.field{margin-top:20px}label{display:block;font-size:13px;font-weight:850;margin:0 0 7px}
+input,select{width:100%;min-height:48px;border:1px solid #cad7cc;border-radius:12px;background:#fff;color:var(--ink);padding:11px 13px;font-size:16px;outline:none}
+input:focus,select:focus{border-color:#79a982;box-shadow:0 0 0 3px rgba(67,123,79,.11)}
+.hint{font-size:12px;line-height:1.45;color:var(--muted);margin-top:7px}
+.error{display:none;margin-top:9px;border:1px solid #efcccc;background:var(--redSoft);color:var(--red);border-radius:11px;padding:9px 11px;font-size:12.5px;line-height:1.4}
+.primary{appearance:none;border:0;border-radius:12px;background:var(--green);color:#fff;min-height:47px;padding:11px 16px;margin-top:17px;font-weight:850;cursor:pointer}
+.primary:hover{background:var(--greenDark)}
+.toolBar{position:sticky;bottom:0;z-index:10;border-top:1px solid var(--line);background:rgba(251,252,251,.96);backdrop-filter:blur(8px);padding:11px 15px calc(11px + env(safe-area-inset-bottom));display:flex;justify-content:space-between;gap:8px}
+.toolGroup{display:flex;gap:8px}.toolBtn{appearance:none;border:1px solid var(--line);background:#fff;color:#344039;border-radius:11px;min-height:43px;padding:9px 12px;font-size:12.5px;font-weight:800;cursor:pointer}.toolBtn:disabled{opacity:.38;cursor:not-allowed}
+.side{padding:17px}.side h2{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 10px}
+.fact{padding:9px 0;border-top:1px solid #edf0ed}.fact:first-child{border-top:0;padding-top:0}.fact span{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.065em;color:var(--muted);font-weight:850}.fact strong{display:block;font-size:14px;margin-top:2px}
+.calc{margin-top:11px;border:1px solid var(--greenMid);background:var(--greenSoft);border-radius:13px;padding:11px}.calc b{color:var(--greenDark)}.calc div{font-size:12.5px;line-height:1.45}.calcTitle{font-size:11px!important;font-weight:900;color:var(--green);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.resultTag{display:inline-block;padding:6px 9px;border-radius:999px;background:var(--greenSoft);color:var(--green);font-size:11.5px;font-weight:900;text-transform:uppercase;letter-spacing:.05em}
+.resultTitle{font-size:clamp(25px,4vw,37px);line-height:1.08;letter-spacing:-.03em;margin:9px 0 11px}.resultLead{font-size:16px;line-height:1.58;margin:0 0 17px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.box{border:1px solid var(--line);border-radius:15px;background:#fcfdfc;padding:14px}.box.full{grid-column:1/-1}.box h3{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 7px}.box p,.box li{font-size:13.5px;line-height:1.5}.box p{margin:0}.box ul{margin:0;padding-left:18px}.box li+li{margin-top:5px}.info{background:var(--blueSoft);border-color:#cadfe9}.info h3{color:var(--blue)}.warn{background:var(--amberSoft);border-color:#ead3a1}.warn h3{color:var(--amber)}.bad{background:var(--redSoft);border-color:#ecc6c6}.bad h3{color:var(--red)}
+.path{margin-top:15px;border-top:1px solid var(--line);padding-top:13px}.pathTitle{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:850;margin-bottom:7px}.crumbs{display:flex;gap:6px;flex-wrap:wrap}.crumb{border:1px solid #e0e6e0;background:#f4f6f4;border-radius:999px;padding:5px 8px;font-size:10.5px}
+.rlCondition{margin-top:14px;border:1px solid #d9dfd7;background:#f7f9f6;border-radius:15px;padding:14px}
+.rlCondition h3{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--greenDark);margin:0 0 7px}
+.rlCondition p{font-size:13.5px;line-height:1.52;margin:0}
+.rlCondition p+p{margin-top:7px}
+.legal{margin-top:14px;border-top:1px solid var(--line);padding-top:13px}.legalTitle{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:850;margin-bottom:7px}.legalLinks{display:flex;flex-wrap:wrap;gap:8px}.legalLinks a{font-size:11.5px;border:1px solid #d5e2d7;background:#f8fbf8;padding:7px 9px;border-radius:10px;text-decoration:none}
+.note{margin-top:14px;border-left:3px solid #c8d5ca;padding-left:10px;color:var(--muted);font-size:11.5px;line-height:1.5}
+
+.demarcacaoBox{margin-top:14px;border:1px solid var(--greenMid);background:#f5faf5;border-radius:15px;padding:14px}
+.demarcacaoBox h3{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--greenDark);margin:0 0 8px}
+.demarcacaoBox ul{margin:0;padding-left:18px}
+.demarcacaoBox li{font-size:13.5px;line-height:1.5}
+.demarcacaoBox li+li{margin-top:5px}
+.demarcacaoBox.compact{margin-top:12px;padding:11px 12px;background:#f8fbf8}
+.demarcacaoBox.compact h3{font-size:10.5px}
+.demarcacaoBox.compact li{font-size:12px;line-height:1.45}
+
+.appGrid.introMode{grid-template-columns:1fr}
+.appGrid.introMode .side,
+.appGrid.introMode .progressWrap,
+.appGrid.introMode .mobileSummary,
+.appGrid.introMode .toolBar{display:none!important}
+.introScreen{padding:2px 0 4px}
+.introScreen .introKicker{font-size:11.5px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:var(--green)}
+.introScreen h2{font-size:clamp(25px,4vw,36px);line-height:1.1;letter-spacing:-.03em;margin:7px 0 10px}
+.introLead{max-width:800px;font-size:15px;line-height:1.58;color:#334139;margin:0}
+.introColumns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.introCard{border:1px solid var(--line);background:#fcfdfc;border-radius:15px;padding:14px}
+.introCard h3{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--greenDark);margin:0 0 8px}
+.introCard p,.introCard li{font-size:13px;line-height:1.5;color:#465249}
+.introCard p{margin:0}
+.introCard ul{margin:0;padding-left:18px}
+.introCard li+li{margin-top:4px}
+.introDocs{margin-top:12px;border:1px solid #cadfe9;background:var(--blueSoft);border-radius:15px;padding:14px}
+.introDocs h3{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin:0 0 8px}
+.introDocs p{font-size:13px;line-height:1.5;margin:0 0 7px;color:#344c59}
+.introDocs ul{margin:0;padding-left:18px}
+.introDocs li{font-size:13px;line-height:1.48;color:#344c59}
+.introDocs li+li{margin-top:4px}
+.introStart{margin-top:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.introStart .primary{margin-top:0;min-width:210px}
+.introStart span{font-size:11.5px;line-height:1.45;color:var(--muted);max-width:520px}
+
+.modeNotice{margin-top:18px;border:1px solid var(--greenMid);background:var(--greenSoft);border-radius:15px;padding:13px 14px}
+.modeNotice strong{color:var(--greenDark)}
+.modeNotice p{margin:0;font-size:13px;line-height:1.52}
+.modeNotice p+p{margin-top:7px}
+.originActions{margin-top:16px;border:1px solid var(--greenMid);background:#f7fbf7;border-radius:16px;padding:14px}
+.originActions h3{margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--greenDark)}
+.originActions p{margin:0;color:var(--muted);font-size:12.5px;line-height:1.48}
+.originButtons{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
+.originButtons .primary{margin-top:0}
+.secondary{appearance:none;border:1px solid #b9cbbb;border-radius:12px;background:#fff;color:var(--greenDark);min-height:47px;padding:11px 16px;font-weight:850;cursor:pointer}
+.secondary:hover{background:#f1f7f2}
+.originList{display:grid;gap:11px;margin-top:15px}
+.originCard{border:1px solid var(--line);border-radius:15px;background:#fcfdfc;padding:14px}
+.originCardHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:8px}
+.originCardHead strong{font-size:15px}
+.originCardHead span{font-size:11px;font-weight:850;color:var(--green);background:var(--greenSoft);padding:5px 7px;border-radius:999px}
+.originMeta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 12px;margin-top:9px}
+.originMeta div{font-size:12.5px;line-height:1.4}
+.originMeta b{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:1px}
+.modeFact{margin-bottom:10px;border:1px solid var(--greenMid);background:var(--greenSoft);border-radius:12px;padding:9px 10px}
+.modeFact span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--green);font-weight:900}
+.modeFact strong{display:block;margin-top:2px;font-size:13px;color:var(--greenDark)}
+
+.siteFooter{margin-top:18px;border-top:1px solid var(--line);padding:18px 4px 2px;display:flex;justify-content:space-between;align-items:flex-start;gap:18px;color:var(--muted)}
+.devInfo{font-size:12px;line-height:1.55}
+.devInfo strong{display:block;color:var(--ink);font-size:13px;margin-bottom:2px}
+.devLinks{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px}
+.devLinks a{width:38px;height:38px;display:grid;place-items:center;text-decoration:none;border:1px solid #d5e2d7;background:#f8fbf8;border-radius:11px;color:var(--greenDark);transition:background .14s,border-color .14s,transform .14s}
+.devLinks a:hover,.devLinks a:focus-visible{background:var(--greenSoft);border-color:#a9c7ae;outline:none}
+.devLinks a:active{transform:scale(.97)}
+.devLinks svg{width:19px;height:19px;display:block}
+.devLinks .iconStroke{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.devLinks .iconFill{fill:currentColor}
+
+
+@media (max-width:820px){
+  .wrap{padding:14px 10px 28px}.hero{margin-bottom:10px}.brand{margin-bottom:6px;gap:10px;align-items:flex-start}.logoMark{width:54px;height:54px;flex-basis:54px;border-radius:12px}h1{font-size:28px}.brandSub{font-size:11.5px}.sub{font-size:12.5px}.experimentalNotice{margin-top:10px;padding:10px 11px}.experimentalNotice p{font-size:11.5px}.pills{display:none}.siteFooter{display:block;padding-left:5px;padding-right:5px}.devLinks{justify-content:flex-start;margin-top:10px}
+  .appGrid{grid-template-columns:1fr}.side{display:none}.panel{border-radius:17px}.progressWrap{padding:13px 14px 0}.mobileSummary{display:block}.content{padding:20px 15px 22px;min-height:0}.question{font-size:23px}.help{font-size:13px}
+  .answers{grid-template-columns:1fr;gap:9px;margin-top:18px}.answer{min-height:70px;padding:13px}.answer strong{font-size:16px}.answer small{font-size:12px}.primary{width:100%;min-height:50px}
+  .toolBar{padding-left:10px;padding-right:10px}.toolBtn{min-height:46px}.grid{grid-template-columns:1fr}.box.full{grid-column:auto}.resultLead{font-size:15px}.legalLinks{display:grid;grid-template-columns:1fr}.legalLinks a{min-height:44px;display:flex;align-items:center}.originButtons{display:grid;grid-template-columns:1fr}.originButtons .primary,.originButtons .secondary{width:100%}.originMeta{grid-template-columns:1fr}.introColumns{grid-template-columns:1fr}.introScreen h2{font-size:25px}.introLead{font-size:14px}.introStart{display:block}.introStart .primary{width:100%}.introStart span{display:block;margin-top:9px}
+}
+@media (max-width:420px){.wrap{padding-left:7px;padding-right:7px}.hero{padding:0 5px}.sub{display:none}.content{padding-left:13px;padding-right:13px}.question{font-size:21px}.progressMeta{font-size:10.5px}.toolBtn{padding:8px 9px}.toolBar{gap:6px}.toolGroup{gap:5px}}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+@media print{body{background:#fff}.wrap{max-width:none;padding:0}.hero,.side,.toolBar,.progressWrap,.mobileSummary{display:none!important}.appGrid{display:block}.panel{border:0;box-shadow:none}.content{padding:0}.answers,.primary{display:none!important}.siteFooter{margin-top:18px;padding-top:10px}.devLinks{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="brand">
+      <div class="logoMark">
+        <img src="Logo_DescompliCAR.png" alt="Logo DescompliCAR">
+      </div>
+      <div>
+        <div class="eyebrow">Diagnóstico para Demarcação da Reserva Legal</div>
+        <h1>DescompliCAR</h1>
+        <div class="brandSub">Ferramenta de Diagnóstico para Demarcação da Reserva Legal</div>
+      </div>
+    </div>
+
+    <p class="sub">Ferramenta de apoio à análise da Reserva Legal no Espírito Santo, considerando histórico registral e do CAR, área do imóvel, regras do PRA, art. 67, cômputo de APP e hipóteses de retificação.</p>
+
+    <div class="experimentalNotice" role="note" aria-label="Aviso sobre o caráter experimental da ferramenta">
+      <div class="noticeIcon">!</div>
+      <p><strong>Ferramenta experimental de auxílio à análise.</strong> As conclusões apresentadas são orientativas e devem ser confirmadas mediante análise da documentação do imóvel, do histórico cadastral e registral e da legislação aplicável ao caso concreto.</p>
+    </div>
+
+    <div class="pills"><span class="pill">Espírito Santo</span><span class="pill">22/07/2008</span><span class="pill">Lei 12.651/2012</span><span class="pill">IN Idaf 005/2020</span></div>
+  </header>
+
+  <div class="appGrid" id="appGrid">
+    <main class="panel" id="panel">
+      <div class="progressWrap"><div class="progressLine"><div id="progress" class="progress"></div></div><div class="progressMeta"><span id="stepLabel">Início</span><span id="progressText">0%</span></div></div>
+      <details class="mobileSummary" id="mobileSummary"><summary>Dados informados</summary><div class="mobileFacts" id="mobileFacts"></div></details>
+      <div class="content" id="content"></div>
+      <div class="toolBar"><button class="toolBtn" id="backBtn" onclick="goBack()">← Voltar</button><div class="toolGroup"><button class="toolBtn" onclick="restart()">Reiniciar</button><button class="toolBtn" id="printBtn" onclick="window.print()" style="display:none">Imprimir</button></div></div>
+    </main>
+    <aside class="side"><h2>Dados informados</h2><div id="desktopFacts"></div></aside>
+  </div>
+
+  <footer class="siteFooter">
+    <div class="devInfo">
+      <strong>Desenvolvimento</strong>
+      Otavio Dalvi · Dalvi Geotecnologias<br>
+      Ferramenta experimental de apoio à análise técnica da Reserva Legal.
+    </div>
+    <div class="devLinks" aria-label="Contatos do desenvolvedor">
+      <a href="mailto:otaviodalvi@gmail.com" aria-label="E-mail: otaviodalvi@gmail.com" title="E-mail: otaviodalvi@gmail.com">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path class="iconStroke" d="M3.5 6.5h17v11h-17z"/><path class="iconStroke" d="m4.5 7.5 7.5 5.7 7.5-5.7"/></svg>
+      </a>
+      <a href="https://www.instagram.com/dalvi.geo/" target="_blank" rel="noopener noreferrer" aria-label="Instagram: @dalvi.geo" title="Instagram: @dalvi.geo">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect class="iconStroke" x="4" y="4" width="16" height="16" rx="4"/><circle class="iconStroke" cx="12" cy="12" r="3.6"/><circle class="iconFill" cx="17.4" cy="6.8" r="1.1"/></svg>
+      </a>
+      <a href="https://www.youtube.com/@DalviGeotec" target="_blank" rel="noopener noreferrer" aria-label="YouTube: @DalviGeotec" title="YouTube: @DalviGeotec">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path class="iconStroke" d="M4.2 7.7c.3-1.2 1.2-2 2.4-2.2 1.5-.3 3.7-.4 5.4-.4s3.9.1 5.4.4c1.2.2 2.1 1 2.4 2.2.2 1.1.3 2.8.3 4.3s-.1 3.2-.3 4.3c-.3 1.2-1.2 2-2.4 2.2-1.5.3-3.7.4-5.4.4s-3.9-.1-5.4-.4c-1.2-.2-2.1-1-2.4-2.2C4 15.2 3.9 13.5 3.9 12s.1-3.2.3-4.3Z"/><path class="iconFill" d="m10 9 5 3-5 3z"/></svg>
+      </a>
+    </div>
+  </footer>
+</div>
+
+<script>
+const MUNICIPIOS=[{"nome": "Afonso Cláudio", "modulo": 20.0}, {"nome": "Alegre", "modulo": 24.0}, {"nome": "Alfredo Chaves", "modulo": 18.0}, {"nome": "Alto Rio Novo", "modulo": 20.0}, {"nome": "Anchieta", "modulo": 16.0}, {"nome": "Apiacá", "modulo": 30.0}, {"nome": "Aracruz", "modulo": 20.0}, {"nome": "Atílio Vivacqua", "modulo": 16.0}, {"nome": "Baixo Guandu", "modulo": 26.0}, {"nome": "Barra de São Francisco", "modulo": 20.0}, {"nome": "Boa Esperança", "modulo": 20.0}, {"nome": "Bom Jesus do Norte", "modulo": 20.0}, {"nome": "Brejetuba", "modulo": 20.0}, {"nome": "Cachoeiro de Itapemirim", "modulo": 16.0}, {"nome": "Cariacica", "modulo": 12.0}, {"nome": "Castelo", "modulo": 18.0}, {"nome": "Colatina", "modulo": 18.0}, {"nome": "Conceição da Barra", "modulo": 20.0}, {"nome": "Conceição do Castelo", "modulo": 18.0}, {"nome": "Divino de São Lourenço", "modulo": 20.0}, {"nome": "Domingos Martins", "modulo": 18.0}, {"nome": "Dores do Rio Preto", "modulo": 20.0}, {"nome": "Ecoporanga", "modulo": 50.0}, {"nome": "Fundão", "modulo": 20.0}, {"nome": "Governador Lindenberg", "modulo": 18.0}, {"nome": "Guarapari", "modulo": 16.0}, {"nome": "Guaçuí", "modulo": 22.0}, {"nome": "Ibatiba", "modulo": 20.0}, {"nome": "Ibiraçu", "modulo": 24.0}, {"nome": "Ibitirama", "modulo": 24.0}, {"nome": "Iconha", "modulo": 18.0}, {"nome": "Irupi", "modulo": 20.0}, {"nome": "Itaguaçu", "modulo": 22.0}, {"nome": "Itapemirim", "modulo": 18.0}, {"nome": "Itarana", "modulo": 20.0}, {"nome": "Iúna", "modulo": 20.0}, {"nome": "Jaguaré", "modulo": 20.0}, {"nome": "Jerônimo Monteiro", "modulo": 30.0}, {"nome": "João Neiva", "modulo": 24.0}, {"nome": "Laranja da Terra", "modulo": 20.0}, {"nome": "Linhares", "modulo": 20.0}, {"nome": "Mantenópolis", "modulo": 20.0}, {"nome": "Marataízes", "modulo": 18.0}, {"nome": "Marechal Floriano", "modulo": 18.0}, {"nome": "Marilândia", "modulo": 18.0}, {"nome": "Mimoso do Sul", "modulo": 30.0}, {"nome": "Montanha", "modulo": 60.0}, {"nome": "Mucurici", "modulo": 60.0}, {"nome": "Muniz Freire", "modulo": 18.0}, {"nome": "Muqui", "modulo": 30.0}, {"nome": "Nova Venécia", "modulo": 20.0}, {"nome": "Pancas", "modulo": 20.0}, {"nome": "Pedro Canário", "modulo": 20.0}, {"nome": "Pinheiros", "modulo": 20.0}, {"nome": "Piúma", "modulo": 18.0}, {"nome": "Ponto Belo", "modulo": 60.0}, {"nome": "Presidente Kennedy", "modulo": 30.0}, {"nome": "Rio Bananal", "modulo": 20.0}, {"nome": "Rio Novo do Sul", "modulo": 20.0}, {"nome": "Santa Leopoldina", "modulo": 18.0}, {"nome": "Santa Maria de Jetibá", "modulo": 18.0}, {"nome": "Santa Teresa", "modulo": 18.0}, {"nome": "Serra", "modulo": 12.0}, {"nome": "Sooretama", "modulo": 20.0}, {"nome": "São Domingos do Norte", "modulo": 18.0}, {"nome": "São Gabriel da Palha", "modulo": 20.0}, {"nome": "São José do Calçado", "modulo": 20.0}, {"nome": "São Mateus", "modulo": 20.0}, {"nome": "São Roque do Canaã", "modulo": 18.0}, {"nome": "Vargem Alta", "modulo": 16.0}, {"nome": "Venda Nova do Imigrante", "modulo": 18.0}, {"nome": "Viana", "modulo": 12.0}, {"nome": "Vila Pavão", "modulo": 20.0}, {"nome": "Vila Valério", "modulo": 20.0}, {"nome": "Vila Velha", "modulo": 12.0}, {"nome": "Vitória", "modulo": 7.0}, {"nome": "Água Doce do Norte", "modulo": 20.0}, {"nome": "Águia Branca", "modulo": 20.0}];
+const URL_LEI='https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2012/lei/l12651compilado.htm';
+const URL_IN005='https://idaf.es.gov.br/Media/idaf/Documentos/Legisla%C3%A7%C3%A3o/CLAM/Instru%C3%A7%C3%A3o%20Normativa%20005,%20de%2009%20mar%202020%20-%20Reserva%20Legal-1.pdf';
+const URL_PRA='https://idaf.es.gov.br/Media/idaf/Documentos/Legisla%C3%A7%C3%A3o/GELCOF/PRA-ES_Instru%C3%A7%C3%A3o%20Normativa%20Idaf_Programa%20de%20Regulariza%C3%A7%C3%A3o%20Ambiental.pdf';
+
+const S={municipio:null,modulo:null,areaAtual:null,mfAtual:null,alterou2008:null,area2008:null,mf2008:null,
+  rlAnterior:null,areaRLOriginal:null,areaImovelAverbacao:null,pctRLAverbacao:null,desmembrouAposRL:null,rlSobreposicaoAtual:null,
+  dispensaDesmembramento:false,descendenciaAreaCompativel:null,
+  rlParteRegular:null,supressaoPosAto:null,rlParteTemVeg:null,rlOriginalDeficiente:false,
+  carPrazo:null,carDeadline:null,veg2008:null,percVeg2008:null,vegAtualTotalArt67:null,percVegAtualArt67:null,art67LocalFixo:false,art67VegOriginalPreservada:null,veg2008PreservadaAtual:null,veg2008Recuperar:null,target:null,targetBasis:null,existingCredit:0,
+  mustRecoverExisting:false,georefMismatchPreserved:false,deficit:null,vegAtualComplemento:null,vegAtualComplementoAuto:false,vegAtualJaContabilizada:null,appComputavel:null,
+  readequacaoPrecisao:null,erroMaiorValor:null,inviabilidadeTecnica:null,recuperacaoNaoIniciada:null,vegInternaRetificacao:null,
+  pendingAfterTarget:null,contextNote:null};
+
+const S_DEFAULT=JSON.parse(JSON.stringify(S));
+const SESSION_KEY='enquadraRL_unificacao_v3_art67_localizacao';
+let A={modo:null,origens:[],origemAtual:1};
+let current='apresentacao',history=[],crumbs=[];
+
+
+function resetS(){
+  Object.keys(S_DEFAULT).forEach(k=>{
+    const v=S_DEFAULT[k];
+    S[k]=(v&&typeof v==='object')?JSON.parse(JSON.stringify(v)):v;
+  });
+}
+
+function clearStoredSession(){
+  try{sessionStorage.removeItem(SESSION_KEY)}catch(e){}
+}
+
+function persistSession(){
+  if(A.modo!=='unificacao')return;
+  try{
+    sessionStorage.setItem(SESSION_KEY,JSON.stringify({A,current,state:snap(),history,crumbs}));
+  }catch(e){}
+}
+
+function restoreSession(){
+  try{
+    const raw=sessionStorage.getItem(SESSION_KEY);
+    if(!raw)return false;
+    const p=JSON.parse(raw);
+    if(!p||!p.A||p.A.modo!=='unificacao')return false;
+    A=p.A;
+    resetS();
+    if(p.state)Object.keys(S).forEach(k=>{if(Object.prototype.hasOwnProperty.call(p.state,k))S[k]=p.state[k]});
+    current=p.current||'introUnificacao';
+    history=Array.isArray(p.history)?p.history:[];
+    crumbs=Array.isArray(p.crumbs)?p.crumbs:[];
+    return true;
+  }catch(e){
+    clearStoredSession();
+    return false;
+  }
+}
+
+
+function iniciarDiagnostico(){
+  clearStoredSession();
+  resetS();
+  A={modo:null,origens:[],origemAtual:1};
+  current='modoAnalise';
+  history=[];
+  crumbs=[];
+  document.getElementById('mobileSummary').open=false;
+  render(true);
+}
+
+function setModoAnalise(unificacao){
+  resetS();
+  history=[];
+  crumbs=[];
+  document.getElementById('mobileSummary').open=false;
+  if(unificacao){
+    A={modo:'unificacao',origens:[],origemAtual:1};
+    current='introUnificacao';
+    persistSession();
+  }else{
+    clearStoredSession();
+    A={modo:'unico',origens:[],origemAtual:1};
+    current='municipio';
+  }
+  render(true);
+}
+
+function iniciarOrigem(){
+  resetS();
+  history=[];
+  crumbs=[];
+  A.origemAtual=(A.origens?.length||0)+1;
+  current='municipio';
+  persistSession();
+  render(true);
+}
+
+function originRecord(){
+  const root=document.getElementById('content');
+  const title=root?.querySelector('.resultTitle')?.textContent?.trim()||'Resultado individual';
+  const tag=root?.querySelector('.resultTag')?.textContent?.trim()||'Reserva Legal';
+  const lead=root?.querySelector('.resultLead')?.textContent?.trim()||'';
+  return {
+    numero:A.origemAtual,
+    municipio:S.municipio,
+    modulo:S.modulo,
+    areaAtual:S.areaAtual,
+    mfAtual:S.mfAtual,
+    area2008:S.area2008,
+    mf2008:S.mf2008,
+    target:S.target,
+    targetBasis:S.targetBasis,
+    existingCredit:S.existingCredit,
+    rlAnterior:S.rlAnterior,
+    rlSobreposicaoAtual:S.rlSobreposicaoAtual,
+    resultadoStep:current,
+    resultadoTag:tag,
+    resultadoTitulo:title,
+    resultadoLead:lead,
+    state:snap(),
+    crumbs:[...crumbs]
+  };
+}
+
+function salvarOrigemAtual(){
+  if(A.modo!=='unificacao'||!current.startsWith('result_')||current==='result_unificacao')return;
+  const rec=originRecord();
+  const idx=A.origens.findIndex(o=>o.numero===A.origemAtual);
+  if(idx>=0)A.origens[idx]=rec;
+  else A.origens.push(rec);
+  persistSession();
+}
+
+function adicionarOutraOrigem(){
+  salvarOrigemAtual();
+  iniciarOrigem();
+}
+
+function concluirUnificacao(){
+  salvarOrigemAtual();
+  current='result_unificacao';
+  history=[];
+  crumbs=[];
+  persistSession();
+  render(true);
+}
+
+function adicionarOrigemDoResumo(){
+  resetS();
+  history=[];
+  crumbs=[];
+  A.origemAtual=(A.origens?.length||0)+1;
+  current='municipio';
+  persistSession();
+  render(true);
+}
+
+function basisLabel(b){
+  if(b==='art67')return 'Art. 67';
+  if(b==='art12')return 'Regra de 20%';
+  return 'Conforme resultado individual';
+}
+
+function originActionsHTML(){
+  if(A.modo!=='unificacao'||!current.startsWith('result_')||current==='result_unificacao')return '';
+  return `<div class="originActions">
+    <h3>Resultado do imóvel de origem ${A.origemAtual}</h3>
+    <p>Este resultado se refere somente ao CAR de origem analisado. Para esta análise, as expressões “imóvel atual” ou “área atual” correspondem à situação individual dessa inscrição antes de sua unificação ao imóvel atualmente existente.</p>
+    <div class="originButtons">
+      <button class="primary" onclick="adicionarOutraOrigem()">+ Analisar outro imóvel de origem</button>
+      <button class="secondary" onclick="concluirUnificacao()">Concluir análise da unificação</button>
+    </div>
+  </div>`;
+}
+
+function mergeSummaryHTML(){
+  const origens=Array.isArray(A.origens)?A.origens:[];
+  const somaArea=origens.reduce((t,o)=>t+(Number(o.areaAtual)||0),0);
+  const cards=origens.map(o=>{
+    const s=o.state||{};
+    const target=(s.target!==null&&s.target!==undefined)
+      ?`${fmt(s.target)} ha — ${basisLabel(s.targetBasis)}`
+      :'Não calculada neste percurso';
+    const credito=(s.rlAnterior===true)
+      ?`${fmt(s.rlSobreposicaoAtual||0)} ha`
+      :'Sem RL anterior informada';
+    return `<div class="originCard">
+      <div class="originCardHead">
+        <strong>Imóvel de origem ${o.numero} — ${esc(o.municipio||'Município não informado')}</strong>
+        <span>${esc(o.resultadoTag||'Resultado')}</span>
+      </div>
+      <div style="font-size:14px;font-weight:850;line-height:1.35">${esc(o.resultadoTitulo||'Resultado individual')}</div>
+      ${o.resultadoLead?`<div style="margin-top:5px;color:var(--muted);font-size:12.5px;line-height:1.45">${esc(o.resultadoLead)}</div>`:''}
+      <div class="originMeta">
+        <div><b>Área da origem</b>${fmt(o.areaAtual)} ha</div>
+        <div><b>Módulo fiscal</b>${fmt(o.modulo,0)} ha/MF</div>
+        <div><b>Situação em 22/07/2008</b>${fmt(o.area2008)} ha (${fmt(o.mf2008,3)} MF)</div>
+        <div><b>Vegetação atual nos limites da origem</b>${s.vegAtualTotalArt67!==null&&s.vegAtualTotalArt67!==undefined?fmt(s.vegAtualTotalArt67)+' ha ('+fmt(s.percVegAtualArt67)+'%)':'—'}</div>
+        <div><b>Vegetação em 22/07/2008 nos limites da origem</b>${s.veg2008!==null&&s.veg2008!==undefined?fmt(s.veg2008)+' ha':'—'}</div>
+        <div><b>Vegetação nativa de 22/07/2008 preservada na mesma localização</b>${s.veg2008PreservadaAtual!==null&&s.veg2008PreservadaAtual!==undefined?fmt(s.veg2008PreservadaAtual)+' ha':'—'}</div>
+        <div><b>Reserva Legal a recuperar na localização de 22/07/2008</b>${s.veg2008Recuperar!==null&&s.veg2008Recuperar!==undefined?fmt(s.veg2008Recuperar)+' ha':'—'}</div>
+        <div><b>Referência calculada</b>${target}</div>
+        <div><b>RL averbada/aprovada incidente</b>${credito}</div>
+        <div><b>Município</b>${esc(o.municipio||'—')}</div>
+      </div>
+      ${demarcacaoRLHTML(s,o.resultadoStep,true)}
+    </div>`;
+  }).join('');
+
+  return `<div class="resultTag">Unificação de CARs</div>
+    <h2 class="resultTitle">Resultados individualizados das áreas de origem</h2>
+    <p class="resultLead">Foram analisados <b>${origens.length}</b> imóveis com inscrições próprias no CAR anteriores à unificação. Os enquadramentos permanecem apresentados separadamente porque cada origem pode possuir situação própria quanto ao prazo de inscrição, art. 67 e Reserva Legal averbada ou aprovada.</p>
+
+    <div class="box info">
+      <h3>Como interpretar</h3>
+      <p>A unificação posterior não é usada por esta ferramenta para recalcular retroativamente todas as origens como se formassem uma única unidade quando possuíam CARs próprios. O resultado abaixo deve ser lido por origem, e não como um novo percentual único aplicado à soma das áreas.</p>
+    </div>
+
+    <div class="modeNotice">
+      <p><strong>Escopo deste modo:</strong> somente imóveis que já possuíam inscrições próprias no CAR antes da unificação são analisados separadamente. Remembramentos ou unificações anteriores ao CAR, ou envolvendo áreas que não possuíam CAR próprio, não constituem por si só uma nova origem neste resumo.</p>
+      <p>As informações desta análise estão armazenadas temporariamente no <b>sessionStorage</b> desta aba.</p>
+    </div>
+
+    <div class="originList">${cards||'<div class="box warn"><p>Nenhuma origem foi concluída.</p></div>'}</div>
+
+    <div class="box full" style="margin-top:13px">
+      <h3>Resumo quantitativo</h3>
+      <p>Soma das áreas informadas para as origens analisadas: <b>${fmt(somaArea)} ha</b>. Este valor é apenas um resumo das áreas cadastradas e não substitui os enquadramentos individualizados acima.</p>
+    </div>
+
+    <div class="originButtons">
+      <button class="primary" onclick="adicionarOrigemDoResumo()">+ Analisar outro imóvel de origem</button>
+      <button class="secondary" onclick="window.print()">Imprimir resumo</button>
+    </div>
+
+    <div class="legal">
+      <div class="legalTitle">Legislação</div>
+      <div class="legalLinks">${link(URL_LEI,'Lei nº 12.651/2012')}${link(URL_IN005,'IN Idaf nº 005/2020')}${link(URL_PRA,'IN Idaf nº 011/2023 — PRA-ES')}</div>
+    </div>
+    <div class="note">DescompliCAR é uma ferramenta experimental de apoio técnico. A consolidação não substitui a análise da cadeia dominial, das inscrições anteriores no CAR, dos atos de Reserva Legal, da documentação do imóvel e da legislação aplicável.</div>`;
+}
+
+function snap(){return JSON.parse(JSON.stringify(S))}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function fmt(n,d=2){if(n===null||n===undefined||Number.isNaN(Number(n)))return '—';return Number(n).toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d})}
+function link(url,label){return `<a href="${url}" target="_blank" rel="noopener noreferrer">${label} ↗</a>`}
+function push(label){history.push({current,state:snap(),crumbs:[...crumbs]});if(label)crumbs.push(label)}
+function goto(step,label){push(label);current=step;render(true)}
+function setGoto(key,val,step,label){push(label);S[key]=val;current=step;render(true)}
+function readNum(id,allowZero=false){const el=document.getElementById(id);let raw=(el.value||'').trim();let v;if(raw.includes(',')&&raw.includes('.'))v=raw.replace(/\./g,'').replace(',','.');else if(raw.includes(','))v=raw.replace(',','.');else v=raw;const n=Number(v);if(!Number.isFinite(n)||n<0||(!allowZero&&n===0)){showErr('Informe um valor numérico '+(allowZero?'maior ou igual a zero.':'maior que zero.'));return null}return n}
+function showErr(msg){const e=document.getElementById('err');if(e){e.textContent=msg;e.style.display='block'}}
+function scrollPanel(){if(window.matchMedia('(max-width:820px)').matches){document.getElementById('panel').scrollIntoView({behavior:'smooth',block:'start'})}}
+function progress(){if(current==='apresentacao')return 0;if(current.startsWith('result_'))return 100;if(current==='modoAnalise')return 5;if(current==='introUnificacao')return 8;return Math.min(94,8+history.length*7)}
+
+function factsHTML(){let a=[];
+ if(A.modo==='unificacao')a.push(`<div class="modeFact"><span>Modo de análise</span><strong>Unificação de CARs — origem ${A.origemAtual}</strong></div>`);
+ if(S.municipio)a.push(`<div class="fact"><span>Município</span><strong>${esc(S.municipio)}</strong></div>`);
+ if(S.modulo)a.push(`<div class="fact"><span>Módulo fiscal</span><strong>${fmt(S.modulo,0)} ha</strong></div>`);
+ if(S.areaAtual!==null)a.push(`<div class="fact"><span>Área atual</span><strong>${fmt(S.areaAtual)} ha (${fmt(S.mfAtual,3)} MF)</strong></div>`);
+ if(S.area2008!==null)a.push(`<div class="fact"><span>Área em 22/07/2008</span><strong>${fmt(S.area2008)} ha</strong></div><div class="calc"><div class="calcTitle">Módulos em 22/07/2008</div><div>${fmt(S.area2008)} ÷ ${fmt(S.modulo,0)} = <b>${fmt(S.mf2008,3)} MF</b></div></div>`);
+ if(S.areaRLOriginal!==null)a.push(`<div class="fact"><span>RL no ato anterior</span><strong>${fmt(S.areaRLOriginal)} ha</strong></div>`);
+ if(S.pctRLAverbacao!==null)a.push(`<div class="fact"><span>RL na época do ato</span><strong>${fmt(S.pctRLAverbacao)}%</strong></div>`);
+ if(S.deseMembrouAposRL){}
+ if(S.rlSobreposicaoAtual!==null)a.push(`<div class="fact"><span>RL averbada ou aprovada dentro do imóvel atual</span><strong>${fmt(S.rlSobreposicaoAtual)} ha</strong></div>`);
+ if(S.dispensaDesmembramento)a.push(`<div class="calc"><div class="calcTitle">Origem do imóvel</div><div><b>Descendente exclusivamente por desmembramento</b><br>Imóvel de origem com RL ≥ 20%.</div></div>`);
+ if(S.vegAtualTotalArt67!==null)a.push(`<div class="fact"><span>Vegetação nativa atual nos limites analisados</span><strong>${fmt(S.vegAtualTotalArt67)} ha (${fmt(S.percVegAtualArt67)}%)</strong></div>`);
+ if(S.veg2008!==null)a.push(`<div class="fact"><span>Vegetação em 22/07/2008 nos limites analisados</span><strong>${fmt(S.veg2008)} ha (${fmt(S.percVeg2008)}% da área analisada)</strong></div>`);
+ if(S.veg2008PreservadaAtual!==null)a.push(`<div class="fact"><span>Vegetação histórica ainda preservada</span><strong>${fmt(S.veg2008PreservadaAtual)} ha</strong></div>`);
+ if(S.veg2008Recuperar!==null)a.push(`<div class="fact"><span>Localização histórica a recuperar</span><strong>${fmt(S.veg2008Recuperar)} ha</strong></div>`);
+ if(S.vegAtualComplementoAuto && S.vegAtualComplemento!==null)a.push(`<div class="fact"><span>Vegetação disponível para complemento</span><strong>${fmt(S.vegAtualComplemento)} ha <small style="font-weight:700;color:var(--muted)">(calculada)</small></strong></div>`);
+
+ const art67EmAnalise=S.mf2008!==null&&S.mf2008<=4.0000001&&S.vegAtualTotalArt67!==null&&S.percVegAtualArt67<19.999999&&(current==='carPrazo'||current==='veg2008'||current==='art67Localizacao'||S.targetBasis==='art67');
+ if(art67EmAnalise){
+   a.push(`<div class="calc"><div class="calcTitle">Referência permanente (20%)</div><div><b>${fmt(S.areaAtual*0.20)} ha</b> — art. 12</div></div>`);
+   if(S.targetBasis==='art67'&&S.target!==null){
+     a.push(`<div class="calc"><div class="calcTitle">Referência aplicável de RL</div><div><b>${fmt(S.target)} ha</b> — art. 67</div></div>`);
+   }else{
+     a.push(`<div class="calc"><div class="calcTitle">Art. 67</div><div><b>Em análise</b><br>A referência será definida após informar a vegetação existente em 22/07/2008 dentro dos limites analisados.</div></div>`);
+   }
+ }else if(S.target!==null){
+   a.push(`<div class="calc"><div class="calcTitle">Referência de RL</div><div><b>${fmt(S.target)} ha</b> — ${S.targetBasis==='art67'?'art. 67':'regra de 20%'}</div></div>`);
+ }
+ return a.join('')||'<div class="hint">As informações do imóvel aparecerão aqui à medida que forem preenchidas.</div>'}
+function renderFacts(){const h=factsHTML();document.getElementById('desktopFacts').innerHTML=h;document.getElementById('mobileFacts').innerHTML=h}
+
+function shell(k,q,h,b=''){return `<div class="kicker">${k}</div><div class="question">${q}</div><div class="help">${h||''}</div>${b}`}
+function yn(q,h,yesFn,noFn,yesSub='',noSub=''){return shell('Pergunta objetiva',q,h,`<div class="answers"><button class="answer" onclick="${yesFn}"><div class="badge">S</div><div><strong>Sim</strong><small>${yesSub}</small></div></button><button class="answer" onclick="${noFn}"><div class="badge">N</div><div><strong>Não</strong><small>${noSub}</small></div></button></div>`)}
+function numeric(q,h,id,placeholder,fn,label='Área (ha)',allowZero=false){return shell('Informe um valor',q,h,`<div class="field"><label for="${id}">${label}</label><input id="${id}" inputmode="decimal" autocomplete="off" placeholder="${placeholder}"></div><div class="error" id="err"></div><button class="primary" onclick="${fn}">Continuar</button>${allowZero?'<div class="hint">Se não houver área disponível, informe 0.</div>':''}`)}
+
+
+function fracionamentoHistoricoHTML(){
+  if(
+    !current.startsWith('result_') ||
+    current==='result_unificacao' ||
+    current==='result_dados_inconsistentes_vegetacao' ||
+    S.targetBasis!=='art67' ||
+    S.alterou2008!==true ||
+    S.area2008===null ||
+    S.areaAtual===null ||
+    !(S.area2008>S.areaAtual+1e-9) ||
+    S.rlAnterior===true
+  ) return '';
+
+  return `<div class="rlCondition" style="border-color:#ead3a1;background:#fffaf0">
+    <h3 style="color:var(--amber)">Verificação complementar do fracionamento</h3>
+    <p>O diagnóstico acima considera o imóvel atualmente analisado e aplica o art. 67 a partir da vegetação nativa existente em <b>22/07/2008 dentro dos seus limites atuais</b>. Entretanto, a área informada para 22/07/2008 era maior que a área atual.</p>
+    <p>Se essa redução decorrer de <b>fracionamento de um imóvel maior</b> e não houver CAR anterior ou Reserva Legal averbada/aprovada que já tenha individualizado a obrigação entre as frações, recomenda-se, quando tecnicamente possível, reconstruir os limites e a vegetação nativa do imóvel existente antes do fracionamento e avaliar conjuntamente as áreas resultantes.</p>
+    <p>Essa verificação é relevante tanto para evitar a redução indevida da Reserva Legal de uma fração com pouca vegetação quanto para evitar exigir de outra fração, isoladamente, área superior a 20% sem confirmar a situação das demais. O <b>art. 12, §1º</b>, determina que, no fracionamento, seja considerada a área do imóvel antes do fracionamento para aplicação do percentual de Reserva Legal; o <b>art. 67</b> disciplina o tratamento dos imóveis de até quatro módulos fiscais; e o <b>art. 18</b> preserva a destinação da Reserva Legal já registrada nos casos de desmembramento.</p>
+    <p>Quando não for possível reconstruir essa situação com segurança, a limitação deve ser registrada na análise.</p>
+  </div>`;
+}
+
+function rlConditionHTML(){
+  if(S.rlAnterior!==true)return '';
+
+  const area=(S.rlSobreposicaoAtual!==null && S.rlSobreposicaoAtual!==undefined)
+    ?` correspondente a <b>${fmt(S.rlSobreposicaoAtual)} ha</b>`
+    :'';
+  const sujeito=A.modo==='unificacao'?'imóvel de origem analisado':'imóvel atual';
+
+  let contexto='';
+  if(S.dispensaDesmembramento){
+    contexto='O imóvel descende exclusivamente por desmembramento do imóvel de origem; deve ser respeitada a parcela da Reserva Legal averbada ou aprovada que efetivamente permaneceu dentro de seus limites.';
+  }else{
+    contexto='Como o imóvel atual não se enquadra na dispensa por descendência exclusiva de desmembramento, a Reserva Legal existente é contabilizada, mas não dispensa a adequação do restante do imóvel ao percentual aplicável.';
+  }
+
+  let retificacao='';
+  const emFluxoRetificacao =
+    current==='result_readequacao' ||
+    current==='result_realocacao_interna_erro' ||
+    current==='result_realocacao_interna' ||
+    current==='result_realocacao_compensacao' ||
+    current==='result_compensacao_total' ||
+    current==='result_sem_hipotese_retificacao';
+
+  if(emFluxoRetificacao){
+    retificacao=' O caso apresentou elementos para análise de retificação, que deverá observar os critérios da IN Idaf nº 005/2020.';
+  }
+
+  return `<div class="rlCondition">
+    <h3>Condição da Reserva Legal anteriormente constituída</h3>
+    <p>A parcela da Reserva Legal averbada ou aprovada que incide sobre o ${sujeito}${area} deve ser mantida e respeitada em sua localização original. Sua alteração somente é admitida quando houver enquadramento nas hipóteses de retificação previstas na <b>IN Idaf nº 005/2020</b>.</p>
+    <p>${contexto}${retificacao}</p>
+  </div>`;
+}
+
+
+function hasNum(v){return v!==null&&v!==undefined&&Number.isFinite(Number(v))}
+
+function demarcacaoRLHTML(state=S,step=current,compact=false){
+  const s=state||{};
+  if(!step||!String(step).startsWith('result_')||step==='result_unificacao')return '';
+
+  const itens=[];
+  const add=t=>{if(t)itens.push(t)};
+  const rl=hasNum(s.rlSobreposicaoAtual)?Number(s.rlSobreposicaoAtual):null;
+  const target=hasNum(s.target)?Number(s.target):null;
+  const vegAtual=hasNum(s.vegAtualTotalArt67)?Number(s.vegAtualTotalArt67):null;
+  const vegComp=hasNum(s.vegAtualComplemento)?Number(s.vegAtualComplemento):null;
+  const app=hasNum(s.appComputavel)?Number(s.appComputavel):null;
+  const veg2008=hasNum(s.veg2008)?Number(s.veg2008):null;
+  const veg2008Pres=hasNum(s.veg2008PreservadaAtual)?Number(s.veg2008PreservadaAtual):null;
+  const veg2008Rec=hasNum(s.veg2008Recuperar)?Number(s.veg2008Recuperar):null;
+
+  if(step==='result_dados_inconsistentes_vegetacao'){
+    add('A demarcação da Reserva Legal não foi definida porque os dados informados são incompatíveis. Revise as áreas antes de utilizar a conclusão no croqui.');
+  }else{
+    if(vegAtual!==null)add('Vegetação nativa existente no imóvel: <b>'+fmt(vegAtual)+' ha</b>.');
+    else if(vegComp!==null)add('Vegetação nativa informada para complementação: <b>'+fmt(vegComp)+' ha</b>.');
+
+    if(s.targetBasis==='art67'&&veg2008!==null){
+      add('Vegetação nativa existente em <b>22/07/2008</b>, dentro dos limites analisados: <b>'+fmt(veg2008)+' ha</b>.');
+      if(veg2008Pres!==null)add('Vegetação nativa de 22/07/2008 que permanece preservada na mesma localização: <b>'+fmt(veg2008Pres)+' ha</b>.');
+    }
+
+    if(s.rlAnterior===true&&rl!==null){
+      add('Reserva Legal averbada/aprovada considerada: <b>'+fmt(rl)+' ha</b>.');
+    }
+
+    switch(step){
+      case 'result_manter_rl':
+      case 'result_dispensa_desmembramento':
+      case 'result_dispensa_desmembramento_art67':
+      case 'result_dispensa_desmembramento_preservada':
+      case 'result_dispensa_desmembramento_preservada_art67':
+      case 'result_rl_preservada':
+      case 'result_preservada_sem_complemento':
+      case 'result_sem_complemento':
+        if(rl!==null)add('Manter no croqui <b>'+fmt(rl)+' ha</b> de Reserva Legal averbada/aprovada.');
+        break;
+
+      case 'result_dispensa_desmembramento_recuperar':
+      case 'result_dispensa_desmembramento_recuperar_art67':
+      case 'result_recuperar_rl':
+      case 'result_recuperar_sem_complemento':
+        if(rl!==null){
+          add('Manter no croqui <b>'+fmt(rl)+' ha</b> de Reserva Legal averbada/aprovada.');
+          add('Recuperar <b>'+fmt(rl)+' ha</b> da Reserva Legal demarcada, conforme a situação informada.');
+        }
+        break;
+
+      case 'result_readequacao':
+        add('Proceder à <b>retificação da Reserva Legal</b> e demarcar no novo croqui a área resultante da medição corrigida, após o recálculo aplicável.');
+        if(target!==null&&rl!==null&&target>rl+1e-9)add('Saldo adicional de Reserva Legal a complementar após a retificação: <b>'+fmt(target-rl)+' ha</b>.');
+        break;
+
+      case 'result_realocacao_interna_erro':
+      case 'result_realocacao_interna':
+        if(rl!==null){
+          add('Proceder à <b>retificação da Reserva Legal</b>.');
+          add('Demarcar no novo croqui <b>'+fmt(rl)+' ha</b> de Reserva Legal sobre vegetação nativa existente na nova localização.');
+          add('Reserva Legal total objeto da retificação: <b>'+fmt(rl)+' ha</b>.');
+        }
+        break;
+
+      case 'result_realocacao_compensacao': {
+        const interna=hasNum(s.vegInternaRetificacao)?Number(s.vegInternaRetificacao):0;
+        const saldo=rl!==null?Math.max(0,rl-interna):0;
+        add('Proceder à <b>retificação da Reserva Legal</b>.');
+        if(interna>1e-9)add('Demarcar no croqui <b>'+fmt(interna)+' ha</b> de Reserva Legal sobre vegetação nativa existente no imóvel.');
+        if(saldo>1e-9)add('Compensar <b>'+fmt(saldo)+' ha</b> de Reserva Legal em imóvel doador.');
+        if(rl!==null)add('Reserva Legal total objeto da regularização: <b>'+fmt(rl)+' ha</b>.');
+        break;
+      }
+
+      case 'result_compensacao_total':
+        add('Proceder à <b>retificação da Reserva Legal</b> conforme a hipótese admitida.');
+        if(rl!==null){
+          add('Compensar <b>'+fmt(rl)+' ha</b> de Reserva Legal em imóvel doador.');
+          add('Reserva Legal total objeto da regularização: <b>'+fmt(rl)+' ha</b>.');
+        }
+        break;
+
+      case 'result_sem_hipotese_retificacao':
+        if(rl!==null)add('Manter a obrigação correspondente a <b>'+fmt(rl)+' ha</b> de Reserva Legal averbada/aprovada; a alteração de localização não foi indicada pela ferramenta.');
+        if(target!==null&&rl!==null&&target>rl+1e-9)add('Saldo de Reserva Legal ainda a complementar: <b>'+fmt(target-rl)+' ha</b>.');
+        break;
+
+      case 'result_art67_local_preservada':
+        if(target!==null){
+          add('Demarcar no croqui <b>'+fmt(target)+' ha</b> de Reserva Legal sobre a vegetação nativa existente em <b>22/07/2008</b>, na mesma localização.');
+          add('Reserva Legal a recuperar nessa demarcação: <b>0,00 ha</b>.');
+          add('Reserva Legal total: <b>'+fmt(target)+' ha</b>.');
+        }
+        break;
+
+      case 'result_art67_local_suprimida':
+        if(target!==null){
+          add('Demarcar no croqui <b>'+fmt(target)+' ha</b> de Reserva Legal na localização da vegetação nativa existente em <b>22/07/2008</b>.');
+          if(veg2008Rec!==null&&veg2008Rec>1e-9)add('Recuperar <b>'+fmt(veg2008Rec)+' ha</b> da Reserva Legal demarcada.');
+          add('Reserva Legal total: <b>'+fmt(target)+' ha</b>.');
+        }
+        break;
+
+      case 'result_complemento_vegetacao': {
+        if(s.rlAnterior===true&&rl!==null){
+          if(s.mustRecoverExisting===true)add('Manter no croqui a Reserva Legal averbada/aprovada e recuperar a área afetada pela supressão informada.');
+          else add('Manter no croqui <b>'+fmt(rl)+' ha</b> de Reserva Legal averbada/aprovada.');
+        }
+        const dem=hasNum(s.deficit)?Math.max(0,Number(s.deficit)):0;
+        if(dem>1e-9)add('Demarcar no croqui <b>'+fmt(dem)+' ha</b> adicionais de Reserva Legal sobre vegetação nativa existente.');
+        if(target!==null)add('Reserva Legal total: <b>'+fmt(target)+' ha</b>.');
+        break;
+      }
+
+      case 'result_complemento_app': {
+        if(s.rlAnterior===true&&rl!==null){
+          if(s.mustRecoverExisting===true)add('Manter no croqui a Reserva Legal averbada/aprovada e recuperar a área afetada pela supressão informada.');
+          else add('Manter no croqui <b>'+fmt(rl)+' ha</b> de Reserva Legal averbada/aprovada.');
+        }
+        if(vegComp!==null&&vegComp>1e-9)add('Demarcar no croqui <b>'+fmt(vegComp)+' ha</b> adicionais de Reserva Legal sobre vegetação nativa existente.');
+        const usoApp=hasNum(s.deficitAposVeg)?Math.max(0,Number(s.deficitAposVeg)):0;
+        if(usoApp>1e-9)add('Demarcar no croqui <b>'+fmt(usoApp)+' ha</b> de Reserva Legal sobre APP preservada ou em recuperação.');
+        if(target!==null)add('Reserva Legal total: <b>'+fmt(target)+' ha</b>.');
+        break;
+      }
+
+      case 'result_deficit_remanescente': {
+        if(s.rlAnterior===true&&rl!==null){
+          if(s.mustRecoverExisting===true)add('Manter no croqui a Reserva Legal averbada/aprovada e recuperar a área afetada pela supressão informada.');
+          else add('Manter no croqui <b>'+fmt(rl)+' ha</b> de Reserva Legal averbada/aprovada.');
+        }
+        if(vegComp!==null&&vegComp>1e-9)add('Demarcar no croqui <b>'+fmt(vegComp)+' ha</b> adicionais de Reserva Legal sobre vegetação nativa existente.');
+        if(app!==null&&app>1e-9)add('Demarcar no croqui <b>'+fmt(app)+' ha</b> de Reserva Legal sobre APP preservada ou em recuperação.');
+        const resto=hasNum(s.deficitAposVeg)?Math.max(0,Number(s.deficitAposVeg)-(app||0)):0;
+        if(resto>1e-9){
+          add('Saldo de Reserva Legal ainda não atendido: <b>'+fmt(resto)+' ha</b>.');
+          add('Esse saldo deverá ser atendido por recuperação no próprio imóvel e/ou compensação em imóvel doador, conforme a alternativa adotada na regularização.');
+        }
+        if(target!==null)add('Referência total de Reserva Legal: <b>'+fmt(target)+' ha</b>.');
+        break;
+      }
+
+      case 'result_regra_geral':
+        if(target!==null){
+          add('Reserva Legal a demarcar no croqui: <b>'+fmt(target)+' ha</b>.');
+          add('A localização deverá ser definida conforme a vegetação nativa e os demais elementos aplicáveis ao imóvel.');
+        }
+        break;
+    }
+  }
+
+  if(!itens.length)return '';
+  return `<div class="demarcacaoBox${compact?' compact':''}">
+    <h3>Demarcação da Reserva Legal</h3>
+    <ul>${itens.map(x=>`<li>${x}</li>`).join('')}</ul>
+  </div>`;
+}
+
+function result(tag,title,lead,basis,actions,caution,cls=''){document.getElementById('printBtn').style.display='inline-block';return `<div class="resultTag">${tag}</div><h2 class="resultTitle">${title}</h2><p class="resultLead">${lead}</p><div class="grid"><div class="box ${cls}"><h3>Enquadramento</h3><p>${basis}</p></div><div class="box ${cls}"><h3>Ponto de atenção</h3><p>${caution}</p></div><div class="box full"><h3>Encaminhamento</h3><ul>${actions.map(x=>`<li>${x}</li>`).join('')}</ul></div></div>${demarcacaoRLHTML()}${rlConditionHTML()}${fracionamentoHistoricoHTML()}${crumbs.length?`<div class="path"><div class="pathTitle">Percurso</div><div class="crumbs">${crumbs.map(c=>`<span class="crumb">${esc(c)}</span>`).join('')}</div></div>`:''}<div class="legal"><div class="legalTitle">Legislação</div><div class="legalLinks">${link(URL_LEI,'Lei nº 12.651/2012')}${link(URL_IN005,'IN Idaf nº 005/2020')}${link(URL_PRA,'IN Idaf nº 011/2023 — PRA-ES')}</div></div><div class="note">DescompliCAR é uma ferramenta experimental de apoio técnico. A conclusão deve ser confirmada pela documentação do imóvel, cadeia dominial, atos anteriores de Reserva Legal, imagens históricas, dados do CAR e legislação aplicável.</div>${originActionsHTML()}`}
+
+function saveMunicipio(){const i=Number(document.getElementById('mun').value);if(!Number.isInteger(i)||i<0){showErr('Selecione um município.');return}push('Município: '+MUNICIPIOS[i].nome);S.municipio=MUNICIPIOS[i].nome;S.modulo=MUNICIPIOS[i].modulo;current='areaAtual';render(true)}
+function saveAreaAtual(){const n=readNum('areaAtual');if(n===null)return;push('Área atual: '+fmt(n)+' ha');S.areaAtual=n;S.mfAtual=n/S.modulo;current='alterou2008';render(true)}
+function noAlterou2008(){push('Sem alteração de área desde 22/07/2008');S.alterou2008=false;S.area2008=S.areaAtual;S.mf2008=S.area2008/S.modulo;current='resumo2008';render(true)}
+function simAlterou2008(){push('Área alterada após 22/07/2008');S.alterou2008=true;current='area2008';render(true)}
+function saveArea2008(){const n=readNum('area2008');if(n===null)return;push('Área em 22/07/2008: '+fmt(n)+' ha');S.area2008=n;S.mf2008=n/S.modulo;current='resumo2008';render(true)}
+function saveAreaRL(){const n=readNum('areaRL');if(n===null)return;push('RL anterior: '+fmt(n)+' ha');S.areaRLOriginal=n;current='areaAto';render(true)}
+function saveAreaAto(){const n=readNum('areaAto');if(n===null)return;push('Área do imóvel na época do ato: '+fmt(n)+' ha');S.areaImovelAverbacao=n;S.pctRLAverbacao=(S.areaRLOriginal/n)*100;S.rlOriginalDeficiente=S.pctRLAverbacao<19.999;current='resumoAto';render(true)}
+function setDesmembramento(v){
+  push(v?'Descendência exclusiva por desmembramento informada':'Não há descendência exclusiva por desmembramento');
+  S.desmembrouAposRL=v;
+  S.dispensaDesmembramento=false;
+  S.descendenciaAreaCompativel=null;
+
+  if(v){
+    S.descendenciaAreaCompativel=S.areaAtual < (S.areaImovelAverbacao-1e-9);
+    if(S.descendenciaAreaCompativel && !S.rlOriginalDeficiente){
+      S.dispensaDesmembramento=true;
+      current='rlSobreposicao';
+    }else if(!S.descendenciaAreaCompativel){
+      current='descendenciaInconsistente';
+    }else{
+      current='rlSobreposicao';
+    }
+  }else{
+    current='rlSobreposicao';
+  }
+  render(true)
+}
+function saveRLSobreposicao(){
+  const n=readNum('rlSobreposicao',true);
+  if(n===null)return;
+  if(n>S.areaRLOriginal){
+    showErr('A parte da RL dentro do imóvel atual não pode ser maior que a área total indicada no ato anterior.');
+    return
+  }
+  push('RL averbada ou aprovada dentro do imóvel atual: '+fmt(n)+' ha');
+  S.rlSobreposicaoAtual=n;
+  S.existingCredit=n;
+
+  if(n<=1e-9){
+    if(S.dispensaDesmembramento){
+      startGeneralTarget('direct_descendant_no_overlap')
+    }else{
+      startGeneralTarget('complement')
+    }
+    return
+  }
+  current='rlParteRegular';
+  render(true)
+}
+function markRLParteRegular(v){
+  push(v?'Parte da RL averbada ou aprovada preservada e compatível':'Parte da RL averbada ou aprovada não está simultaneamente preservada e compatível');
+  S.rlParteRegular=v;
+  if(v){
+    S.existingCredit=S.rlSobreposicaoAtual;
+    if(S.dispensaDesmembramento){
+      startGeneralTarget('direct_descendant_regular')
+    }else{
+      startGeneralTarget('complement')
+    }
+  }else{
+    current='supressao';
+    render(true)
+  }
+}
+function markSupressao(v){
+  push(v?'Houve supressão após o ato':'Não houve supressão após o ato');
+  S.supressaoPosAto=v;
+  if(v){
+    S.mustRecoverExisting=true;
+    S.existingCredit=S.rlSobreposicaoAtual;
+    if(S.dispensaDesmembramento){
+      startGeneralTarget('direct_descendant_recover')
+    }else{
+      startGeneralTarget('recover_and_complement')
+    }
+  }else{
+    current='rlParteTemVeg';
+    render(true)
+  }
+}
+function markParteTemVeg(v){
+  push(v?'Parte da RL averbada ou aprovada ainda possui vegetação nativa':'Parte da RL averbada ou aprovada não possui vegetação nativa');
+  S.rlParteTemVeg=v;
+  S.existingCredit=S.rlSobreposicaoAtual;
+  if(v){
+    S.georefMismatchPreserved=true;
+    if(S.dispensaDesmembramento){
+      startGeneralTarget('direct_descendant_preserved_mismatch')
+    }else{
+      startGeneralTarget('preserved_mismatch_and_complement')
+    }
+  }else{
+    if(S.dispensaDesmembramento){
+      startGeneralTarget('direct_descendant_retification')
+    }else{
+      startGeneralTarget('retification_after_target')
+    }
+  }
+}
+
+function startGeneralTarget(after){
+  S.pendingAfterTarget=after;
+  S.art67LocalFixo=false;
+  S.target=null;
+  S.targetBasis=null;
+
+  if(S.mf2008<=4.0000001){
+    current='vegAtualArt67';
+  }else{
+    S.carPrazo=false;
+    S.targetBasis='art12';
+    S.target=S.areaAtual*0.20;
+    afterTargetReady();
+  }
+  render(true)
+}
+
+function setCarPrazo(v){
+  push(v?'CAR inscrito dentro do prazo do PRA':'CAR inscrito fora do prazo do PRA');
+  S.carPrazo=v;
+
+  if(v){
+    current='veg2008';
+  }else{
+    S.art67LocalFixo=false;
+    S.targetBasis='art12';
+    S.target=S.areaAtual*0.20;
+    push('Sem elegibilidade temporal ao art. 67: aplicar regra permanente de 20%');
+    afterTargetReady();
+  }
+  render(true)
+}
+
+function saveVegAtualArt67(){
+  const n=readNum('vegAtualArt67',true);
+  if(n===null)return;
+
+  if(n>S.areaAtual){
+    showErr('A vegetação nativa atual não pode superar a área do imóvel analisado.');
+    return
+  }
+
+  const rlPreservadaIntegral =
+    (S.rlParteRegular===true) ||
+    (S.rlParteTemVeg===true);
+
+  if(rlPreservadaIntegral && n+1e-9<(S.existingCredit||0)){
+    showErr('A vegetação nativa atual total não pode ser inferior à área da Reserva Legal averbada ou aprovada que foi informada como preservada. Confira os valores.');
+    return
+  }
+
+  push('Vegetação nativa existente atualmente no imóvel analisado: '+fmt(n)+' ha');
+  S.vegAtualTotalArt67=n;
+  S.percVegAtualArt67=(n/S.areaAtual)*100;
+
+  if(S.percVegAtualArt67>=19.999999){
+    S.art67LocalFixo=false;
+    S.targetBasis='art12';
+    S.target=S.areaAtual*0.20;
+    push('Vegetação nativa atual igual ou superior a 20%: não utilizar o art. 67');
+    afterTargetReady();
+  }else{
+    push('Vegetação nativa atual inferior a 20%: verificar elegibilidade temporal ao art. 67');
+    current='carPrazo';
+  }
+  render(true)
+}
+
+function saveVeg2008(){
+  const n=readNum('veg2008',true);
+  if(n===null)return;
+
+  if(n>S.areaAtual){
+    showErr('A vegetação existente em 22/07/2008 dentro dos limites analisados não pode superar a área do imóvel atualmente analisado.');
+    return
+  }
+
+  push('Vegetação existente em 22/07/2008 dentro dos limites analisados: '+fmt(n)+' ha');
+  S.veg2008=n;
+  S.percVeg2008=(n/S.areaAtual)*100;
+  S.veg2008PreservadaAtual=null;
+  S.veg2008Recuperar=null;
+  S.art67VegOriginalPreservada=null;
+  S.art67LocalFixo=true;
+  S.targetBasis='art67';
+  S.target=n;
+  push('Art. 67: a referência de RL corresponde à vegetação de 22/07/2008 dentro dos limites analisados');
+  afterTargetReady();
+  render(true)
+}
+function prepareArt67Fixed(context){S.contextNote=context;S.deficit=Math.max(0,S.target-(S.existingCredit||0));if(S.deficit<=1e-9){if(context==='recover_and_complement')current='result_recuperar_sem_complemento';else if(context==='preserved_mismatch_and_complement')current='result_preservada_sem_complemento';else current='result_sem_complemento'}else{current='art67Localizacao'}}
+function saveVeg2008PreservadaAtual(){
+  const n=readNum('veg2008PreservadaAtual',true);
+  if(n===null)return;
+
+  const historica=Number(S.veg2008||0);
+  const atual=Number(S.vegAtualTotalArt67||0);
+  const maximo=Math.min(historica,atual);
+
+  if(n>historica+1e-9){
+    showErr('A parcela atualmente preservada na localização histórica não pode superar a vegetação existente em 22/07/2008 dentro dos limites analisados ('+fmt(historica)+' ha).');
+    return
+  }
+  if(n>atual+1e-9){
+    showErr('A parcela atualmente preservada na localização histórica não pode superar toda a vegetação nativa existente atualmente no imóvel ('+fmt(atual)+' ha).');
+    return
+  }
+
+  push('Vegetação de 22/07/2008 ainda preservada na mesma localização: '+fmt(n)+' ha');
+  S.veg2008PreservadaAtual=n;
+  S.veg2008Recuperar=Math.max(0,historica-n);
+  S.art67VegOriginalPreservada=S.veg2008Recuperar<=1e-9;
+
+  if(S.art67VegOriginalPreservada){
+    current='result_art67_local_preservada';
+  }else{
+    current='result_art67_local_suprimida';
+  }
+  render(true)
+}
+function afterTargetReady(){
+  const after=S.pendingAfterTarget;
+  S.pendingAfterTarget=null;
+
+  if(after==='direct_descendant_retification'){
+    S.deficit=0;
+    current='readequacao';
+    return
+  }
+
+  if(after==='direct_descendant_regular'||after==='direct_descendant_no_overlap'){
+    current=S.targetBasis==='art67'?'result_dispensa_desmembramento_art67':'result_dispensa_desmembramento';
+    return
+  }
+
+  if(after==='direct_descendant_recover'){
+    current=S.targetBasis==='art67'?'result_dispensa_desmembramento_recuperar_art67':'result_dispensa_desmembramento_recuperar';
+    return
+  }
+
+  if(after==='direct_descendant_preserved_mismatch'){
+    current=S.targetBasis==='art67'?'result_dispensa_desmembramento_preservada_art67':'result_dispensa_desmembramento_preservada';
+    return
+  }
+
+  if(after==='retification_after_target'){
+    S.deficit=Math.max(0,S.target-(S.existingCredit||0));
+    current='readequacao';
+    return
+  }
+
+  if(after==='recover_and_complement'||after==='preserved_mismatch_and_complement'||after==='complement'||after==='no_prior'){
+    if(S.targetBasis==='art67'&&S.art67LocalFixo){
+      prepareArt67Fixed(after)
+    }else{
+      prepareComplement(after)
+    }
+    return
+  }
+
+  current='result_regra_geral'
+}
+function prepareComplement(context){
+  S.contextNote=context;
+  S.deficit=Math.max(0,S.target-(S.existingCredit||0));
+  S.vegAtualComplementoAuto=false;
+  S.vegAtualJaContabilizada=null;
+
+  if(S.deficit<=1e-9){
+    if(context==='recover_and_complement')current='result_recuperar_sem_complemento';
+    else if(context==='preserved_mismatch_and_complement')current='result_preservada_sem_complemento';
+    else current='result_sem_complemento';
+    return
+  }
+
+  const totalAtualConhecido=S.vegAtualTotalArt67!==null;
+  const semCreditoAnterior=(S.existingCredit||0)<=1e-9;
+  const rlIntegralmentePreservada=
+    (context==='complement' && S.rlParteRegular===true) ||
+    (context==='preserved_mismatch_and_complement' && S.rlParteTemVeg===true);
+
+  // Só calcula automaticamente quando é possível saber, sem estimativa,
+  // quanto da vegetação atual já está contabilizada na RL existente.
+  if(totalAtualConhecido && (semCreditoAnterior || rlIntegralmentePreservada)){
+    S.vegAtualJaContabilizada=semCreditoAnterior?0:(S.existingCredit||0);
+
+    if(S.vegAtualTotalArt67+1e-9<S.vegAtualJaContabilizada){
+      current='result_dados_inconsistentes_vegetacao';
+      return
+    }
+
+    S.vegAtualComplemento=Math.max(0,S.vegAtualTotalArt67-S.vegAtualJaContabilizada);
+    S.vegAtualComplementoAuto=true;
+
+    const rem=Math.max(0,S.deficit-S.vegAtualComplemento);
+    crumbs.push('Vegetação disponível calculada automaticamente: '+fmt(S.vegAtualComplemento)+' ha');
+
+    if(rem<=1e-9){
+      current='result_complemento_vegetacao';
+    }else{
+      S.deficitAposVeg=rem;
+      current='appComputavel';
+    }
+    return
+  }
+
+  // Nos demais casos (ex.: RL parcialmente suprimida), não é seguro descontar
+  // automaticamente a RL da vegetação total atual, pois não se conhece a sobreposição.
+  current='vegAtualComplemento'
+}
+function saveVegAtualComplemento(){const n=readNum('vegAtual',true);if(n===null)return;if(n>S.areaAtual){showErr('A área informada não pode superar a área atual do imóvel.');return}push('Vegetação nativa disponível para complemento: '+fmt(n)+' ha');S.vegAtualComplemento=n;S.vegAtualComplementoAuto=false;S.vegAtualJaContabilizada=null;const rem=Math.max(0,S.deficit-n);if(rem<=1e-9){current='result_complemento_vegetacao'}else{S.deficitAposVeg=rem;current='appComputavel'}render(true)}
+function saveApp(){const n=readNum('appArea',true);if(n===null)return;if(n>S.areaAtual){showErr('A área informada não pode superar a área atual do imóvel.');return}push('APP computável: '+fmt(n)+' ha');S.appComputavel=n;current=n+1e-9>=S.deficitAposVeg?'result_complemento_app':'result_deficit_remanescente';render(true)}
+
+function markReadequacao(v){push(v?'Divergência por medição mais precisa, sem desmembramento':'Não é hipótese de simples readequação por medição');S.readequacaoPrecisao=v;current=v?'result_readequacao':'erroMaiorValor';render(true)}
+function markErroMaior(v){push(v?'Erro anterior + área interna de maior valor ecológico':'Não há erro anterior com alternativa interna de maior valor ecológico');S.erroMaiorValor=v;current=v?'vegInternaErro':'inviabilidade';render(true)}
+function saveVegInternaErro(){const n=readNum('vegIntErro',true);if(n===null)return;push('Vegetação interna para realocação: '+fmt(n)+' ha');S.vegInternaRetificacao=n;if(n+1e-9>=S.rlSobreposicaoAtual){current='result_realocacao_interna_erro'}else{S.contextNote='erro_insuficiente';current='inviabilidade'}render(true)}
+function markInviabilidade(v){push(v?'Há inviabilidade técnica comprovada':'Não há inviabilidade técnica comprovada');S.inviabilidadeTecnica=v;current=v?'vegInternaComp':'recuperacaoNaoIniciada';render(true)}
+function markRecuperacao(v){push(v?'Recuperação ainda não iniciada':'Recuperação já iniciada ou hipótese não comprovada');S.recuperacaoNaoIniciada=v;current=v?'vegInternaComp':'result_sem_hipotese_retificacao';render(true)}
+function saveVegInternaComp(){const n=readNum('vegIntComp',true);if(n===null)return;push('Vegetação nativa interna disponível: '+fmt(n)+' ha');S.vegInternaRetificacao=n;if(n+1e-9>=S.rlSobreposicaoAtual)current='result_realocacao_interna';else if(n>0)current='result_realocacao_compensacao';else current='result_compensacao_total';render(true)}
+
+
+function retifExtraAction(){
+  if(S.target===null||S.dispensaDesmembramento)return null;
+  const d=Math.max(0,(S.target||0)-(S.rlSobreposicaoAtual||0));
+  if(d<=1e-9)return null;
+  const motivo=S.rlOriginalDeficiente
+    ?'Como a Reserva Legal averbada ou aprovada correspondia a menos de 20% do imóvel na época do ato'
+    :'Como o imóvel atual não se enquadra na dispensa de complementação por descendência exclusiva de desmembramento';
+  return motivo+', além da retificação será necessário complementar aproximadamente <b>'+fmt(d)+' ha</b> até a referência de <b>'+fmt(S.target)+' ha</b> ('+(S.targetBasis==='art67'?'art. 67':'regra de 20%')+'). Se a vegetação nativa disponível não for suficiente, poderá ser computada APP conservada ou em recuperação nos termos do art. 15; eventual saldo seguirá as formas de regularização aplicáveis.';
+}
+function withRetifExtra(actions){const x=retifExtraAction();return x?[...actions,x]:actions}
+
+function render(autoScroll=false){const c=document.getElementById('content');const p=progress();const intro=current==='apresentacao';const appGrid=document.getElementById('appGrid');if(appGrid)appGrid.classList.toggle('introMode',intro);document.getElementById('progress').style.width=p+'%';document.getElementById('progressText').textContent=p+'%';document.getElementById('stepLabel').textContent=current==='apresentacao'?'Apresentação':current==='modoAnalise'?'Início':current==='introUnificacao'?'Orientação':current==='result_unificacao'?'Resumo':current.startsWith('result_')?(A.modo==='unificacao'?`Resultado — origem ${A.origemAtual}`:'Resultado'):(A.modo==='unificacao'?`Origem ${A.origemAtual} — etapa ${history.length+1}`:'Etapa '+(history.length+1));document.getElementById('backBtn').disabled=intro||history.length===0;document.getElementById('printBtn').style.display=current.startsWith('result_')?'inline-block':'none';renderFacts();
+
+if(current==='apresentacao')c.innerHTML=`
+  <div class="introScreen">
+    <div class="introKicker">Antes de iniciar</div>
+    <h2>Diagnóstico para Demarcação da Reserva Legal</h2>
+    <p class="introLead">O DescompliCAR é uma ferramenta experimental de apoio à análise e à elaboração da demarcação da Reserva Legal no Cadastro Ambiental Rural — CAR, com aplicação direcionada ao Estado do Espírito Santo.</p>
+
+    <div class="introColumns">
+      <div class="introCard">
+        <h3>O que a ferramenta faz</h3>
+        <p>Conduz o usuário por uma sequência de perguntas sobre a situação atual e o histórico do imóvel para organizar o enquadramento da Reserva Legal e apresentar uma orientação prática para sua demarcação no croqui.</p>
+      </div>
+      <div class="introCard">
+        <h3>Como utilizar</h3>
+        <p>Responda às perguntas com base na documentação e nos elementos técnicos disponíveis. Quando a análise depender do histórico do imóvel, consulte a cadeia dominial, os CARs anteriores e os elementos cartográficos necessários antes de prosseguir.</p>
+      </div>
+    </div>
+
+    <div class="introDocs">
+      <h3>Tenha as informações e documentos em mãos</h3>
+      <p>Antes de iniciar, reúna, sempre que aplicável:</p>
+      <ul>
+        <li>município e área atual do imóvel;</li>
+        <li>matrícula atual e, quando necessário, a cadeia dominial;</li>
+        <li>área e situação do imóvel em 22/07/2008;</li>
+        <li>informações sobre desmembramentos, remembramentos ou unificações;</li>
+        <li>CAR atual e CARs anteriores relacionados ao imóvel, quando existentes;</li>
+        <li>informações sobre Reserva Legal averbada/aprovada;</li>
+        <li>área de vegetação nativa existente atualmente;</li>
+        <li>elementos que permitam identificar a vegetação nativa existente em 22/07/2008;</li>
+        <li>área de APP preservada ou em recuperação, quando necessária para o cômputo da Reserva Legal.</li>
+      </ul>
+    </div>
+
+    <div class="experimentalNotice" role="note" aria-label="Aviso sobre o caráter experimental da ferramenta">
+      <div class="noticeIcon">!</div>
+      <p><strong>Importante.</strong> O DescompliCAR é uma ferramenta experimental de auxílio. As conclusões são orientativas e devem ser confirmadas mediante análise da documentação do imóvel, do histórico cadastral e registral e da legislação aplicável ao caso concreto.</p>
+    </div>
+
+    <div class="introStart">
+      <button class="primary" onclick="iniciarDiagnostico()">Iniciar diagnóstico →</button>
+      <span>O progresso da análise começa após o início do diagnóstico.</span>
+    </div>
+  </div>`;
+else if(current==='modoAnalise')c.innerHTML=yn(
+  'O imóvel atual resulta da unificação de dois ou mais imóveis que já possuíam inscrições próprias no CAR antes da unificação?',
+  'Responda “Sim” somente quando existiam CARs independentes antes da unificação. Esta análise individualizada não se aplica automaticamente a qualquer remembramento da cadeia dominial, nem a áreas que foram unificadas antes de possuírem CAR próprio.',
+  'setModoAnalise(true)',
+  'setModoAnalise(false)',
+  'Cada CAR de origem será analisado separadamente e armazenado temporariamente nesta sessão.',
+  'O imóvel será analisado como uma única unidade pela chave normal.'
+);
+else if(current==='introUnificacao')c.innerHTML=shell(
+  'Unificação de CARs já existentes',
+  'Cada imóvel de origem será analisado individualmente.',
+  'A análise de cada origem começará novamente pelo município e pelo módulo fiscal, pois as inscrições que compõem o CAR atual podem estar em municípios diferentes.',
+  `<div class="modeNotice">
+    <p><strong>Use este modo apenas para CARs próprios anteriores à unificação.</strong></p>
+    <p>Remembramentos, unificações ou incorporações ocorridos antes da inscrição no CAR, ou envolvendo áreas que ainda não possuíam CAR próprio, não devem ser cadastrados como origens independentes apenas por esse motivo.</p>
+    <p>Ao concluir uma origem, o resultado será guardado temporariamente no <b>sessionStorage</b> desta aba. Você poderá adicionar novas origens e, ao final, visualizar os resultados em conjunto.</p>
+  </div>
+  <button class="primary" onclick="iniciarOrigem()">Iniciar análise do imóvel de origem 1</button>`
+);
+else if(current==='municipio')c.innerHTML=shell(
+  'Identificação',
+  A.modo==='unificacao'?`Em qual município está localizado o imóvel de origem ${A.origemAtual}?`:'Em qual município está localizado o imóvel?',
+  A.modo==='unificacao'?'O módulo fiscal será definido individualmente para esta origem. Não reaproveite o município da origem anterior, mesmo que pertençam ao mesmo CAR atual.':'O módulo fiscal será preenchido automaticamente conforme a tabela incorporada à ferramenta.',
+  `<div class="field"><label for="mun">Município</label><select id="mun"><option value="">Selecione…</option>${MUNICIPIOS.map((m,i)=>`<option value="${i}">${esc(m.nome)} — ${fmt(m.modulo,0)} ha/MF</option>`).join('')}</select></div><div class="error" id="err"></div><button class="primary" onclick="saveMunicipio()">Continuar</button>`
+);
+else if(current==='areaAtual')c.innerHTML=numeric(
+  A.modo==='unificacao'?`Qual é a área do imóvel de origem ${A.origemAtual}?`:'Qual é a área atual do imóvel?',
+  A.modo==='unificacao'?'Informe a área correspondente à inscrição no CAR desta origem na situação individual considerada antes de sua unificação ao imóvel atual.':'Informe a área total constante na situação registral atual.',
+  'areaAtual','Ex.: 72,50','saveAreaAtual()'
+);
+else if(current==='alterou2008')c.innerHTML=yn(
+  A.modo==='unificacao'?'A área deste imóvel de origem foi alterada depois de 22 de julho de 2008, antes de sua unificação?':'A área do imóvel foi alterada depois de 22 de julho de 2008?',
+  A.modo==='unificacao'
+    ?'Considere os atos que alteraram esta unidade de origem entre 22/07/2008 e a situação individual utilizada para seu CAR antes da unificação. Verifique matrícula e cadeia dominial.'
+    :'Considere desmembramento, remembramento/unificação ou qualquer outro ato que tenha alterado a área. Essa informação deve ser verificada na certidão da matrícula e, quando necessário, na cadeia dominial, até identificar a área correspondente à situação existente em 22/07/2008.',
+  'simAlterou2008()','noAlterou2008()',
+  'A área em 2008 era diferente da situação individual considerada.',
+  'Não houve alterações desde 22/07/2008.'
+);
+else if(current==='area2008')c.innerHTML=numeric('Qual era a área do imóvel em 22 de julho de 2008?','Use a área apurada pela matrícula e pela cadeia dominial para a situação existente nessa data.','area2008','Ex.: 95,00','saveArea2008()');
+else if(current==='resumo2008')c.innerHTML=shell(
+  'Cálculo automático',
+  `Em 22/07/2008, o imóvel de referência possuía ${fmt(S.mf2008,3)} módulos fiscais.`,
+  `Cálculo: ${fmt(S.area2008)} ha ÷ ${fmt(S.modulo,0)} ha/MF em ${esc(S.municipio)}. A área existente em 22/07/2008 é usada para definir a dimensão histórica do imóvel e verificar o requisito de até quatro módulos fiscais. Ela não é, por si só, a área sobre a qual será calculada a Reserva Legal do art. 67.`,
+  `<div class="box info" style="margin-top:18px">
+    <h3>Como esta informação será utilizada</h3>
+    <p><b>${S.mf2008<=4.0000001?'Até 4 módulos fiscais':'Acima de 4 módulos fiscais'}</b> em 22/07/2008.</p>
+    <p style="margin-top:8px">Se houver possibilidade de aplicação do art. 67, a ferramenta primeiro verificará a vegetação nativa existente atualmente no imóvel analisado. Somente quando ela for inferior a 20% serão verificados os demais requisitos e a vegetação existente em 22/07/2008 <b>dentro dos limites do imóvel que está sendo analisado</b>.</p>
+  </div>
+  <button class="primary" onclick="goto('rlAnterior','Classificação em 22/07/2008 calculada')">Continuar</button>`
+);
+else if(current==='rlAnterior')c.innerHTML=yn('Existe Reserva Legal anteriormente constituída para o imóvel ou para o imóvel de origem?','Considere Reserva Legal averbada na matrícula, Termo de Compromisso ou Reserva Legal formalizada em CAR anterior.','setGoto(\'rlAnterior\',true,\'areaRL\',\'Existe RL anterior\')','setGoto(\'rlAnterior\',false,\'generalNoPrior\',\'Não existe RL anterior\')','Existe ato anterior de Reserva Legal.','Não foi identificada Reserva Legal anterior.');
+else if(current==='generalNoPrior'){S.existingCredit=0;S.pendingAfterTarget='no_prior';c.innerHTML=shell('Regra aplicável','Vamos definir o percentual de Reserva Legal exigível.','O art. 67 será considerado somente quando o imóvel se enquadrar no benefício do PRA-ES, atender aos requisitos materiais do dispositivo e não possuir atualmente vegetação nativa suficiente para cumprir a regra permanente de 20%.',`<button class="primary" onclick="startGeneralTarget('no_prior')">Continuar</button>`)}
+else if(current==='areaRL')c.innerHTML=numeric('Qual é a área total da Reserva Legal indicada no ato anterior?','Informe a área da Reserva Legal averbada, compromissada ou formalizada no CAR anterior.','areaRL','Ex.: 20,00','saveAreaRL()');
+else if(current==='areaAto')c.innerHTML=numeric('Qual era a área do imóvel considerada quando essa Reserva Legal foi constituída?','Esse dado permite verificar se a Reserva Legal correspondia a 20% da área do imóvel na época do ato. Consulte a matrícula e, se necessário, a cadeia dominial.','areaAto','Ex.: 100,00','saveAreaAto()');
+else if(current==='resumoAto')c.innerHTML=shell('Verificação automática',`A Reserva Legal correspondia a ${fmt(S.pctRLAverbacao)}% da área do imóvel na época do ato.`,S.rlOriginalDeficiente?'Como o percentual era inferior a 20%, a Reserva Legal existente será contabilizada, mas não gera dispensa de complementação. A ferramenta calculará a referência aplicável ao imóvel atual (20% ou art. 67).':'A Reserva Legal atingia pelo menos 20% na época do ato. Isso somente poderá dispensar complementação no imóvel atual se a cadeia dominial demonstrar que ele descende exclusivamente por desmembramento daquele imóvel, sem unificação, remembramento ou incorporação posterior de outras áreas, e se sua área atual for inferior à área do imóvel de origem.',`<button class="primary" onclick="goto('desmembrouAposRL','Percentual da RL averbada ou aprovada calculado')">Continuar</button>`);
+else if(current==='desmembrouAposRL')c.innerHTML=yn('O imóvel atual descende exclusivamente por desmembramento do imóvel em que essa Reserva Legal foi averbada ou aprovada?','Verifique a cadeia dominial. Responda “Sim” somente quando o imóvel atual resultar de desmembramento daquele imóvel, ainda que por desmembramentos sucessivos, sem posterior remembramento, unificação ou incorporação de outras áreas. A dispensa de complementação somente será considerada se a Reserva Legal do imóvel de origem correspondia a pelo menos 20% e a área atual for inferior à área daquele imóvel.','setDesmembramento(true)','setDesmembramento(false)','A cadeia dominial demonstra descendência exclusivamente por desmembramento.','Houve unificação/remembramento/incorporação, ou a descendência exclusiva não foi comprovada.');
+else if(current==='descendenciaInconsistente')c.innerHTML=shell('Verificação automática','A área atual é incompatível com a dispensa por descendência exclusiva de desmembramento.',`O imóvel atual possui <b>${fmt(S.areaAtual)} ha</b>, enquanto o imóvel no qual a Reserva Legal foi constituída possuía <b>${fmt(S.areaImovelAverbacao)} ha</b>. Como a área atual não é inferior à área do imóvel de origem, a ferramenta não aplicará a dispensa por desmembramento. A Reserva Legal averbada ou aprovada que estiver dentro do imóvel atual será contabilizada, e o restante será analisado pela regra aplicável ao imóvel atual.`,`<div class="box warn" style="margin-top:18px"><h3>Consequência</h3><p>Verifique na cadeia dominial se houve unificação, remembramento ou incorporação de outras áreas.</p></div><button class="primary" onclick="goto('rlSobreposicao','Dispensa por desmembramento afastada pela verificação de área')">Continuar</button>`);
+else if(current==='rlSobreposicao')c.innerHTML=numeric('Qual é a área da Reserva Legal averbada ou aprovada que está dentro do imóvel atual?','Informe somente a parte da Reserva Legal do imóvel de origem que efetivamente sobrepõe o imóvel analisado. Se houver descendência exclusiva por desmembramento, essa parcela pode representar menos ou mais de 20% da área atual sem gerar, isoladamente, obrigação de complementação. Se não houver essa descendência exclusiva, a área informada será contabilizada como Reserva Legal existente e comparada com a referência aplicável ao imóvel atual.','rlSobreposicao','Ex.: 6,40','saveRLSobreposicao()','Área da RL dentro do imóvel atual (ha)',true);
+else if(current==='rlParteRegular')c.innerHTML=yn('A parte da Reserva Legal averbada ou aprovada que sobrepõe o imóvel atual está localizada conforme o ato anterior e permanece preservada?','Considere exclusivamente a parcela da Reserva Legal averbada ou aprovada que recai sobre o imóvel atual. Quando houver descendência exclusiva por desmembramento do imóvel de origem com RL de pelo menos 20%, essa parcela pode representar menos ou mais de 20% da área atual.','markRLParteRegular(true)','markRLParteRegular(false)','Localização compatível e vegetação preservada.','Há divergência de localização e/ou a área não está preservada.');
+else if(current==='supressao')c.innerHTML=yn('Houve supressão de vegetação nativa nessa parte da Reserva Legal depois da sua constituição?','A retificação não deve ser usada para afastar a obrigação incidente sobre Reserva Legal que tenha sido desmatada após sua constituição.','markSupressao(true)','markSupressao(false)','Foi identificada supressão posterior ao ato.','Não foi identificada supressão posterior ao ato.');
+else if(current==='rlParteTemVeg')c.innerHTML=yn('A parte da Reserva Legal averbada ou aprovada que sobrepõe o imóvel atual ainda possui vegetação nativa?','Se a área de Reserva Legal permanece vegetada, a ferramenta não a considera disponível para realocação apenas para liberar a área originalmente protegida.','markParteTemVeg(true)','markParteTemVeg(false)','A área permanece coberta por vegetação nativa.','A área não possui vegetação nativa.');
+else if(current==='carPrazo'){
+  S.carDeadline=S.mfAtual<=4.0000001?'31 de dezembro de 2025':'31 de dezembro de 2023';
+  c.innerHTML=yn(
+    `O imóvel foi inscrito no CAR até ${S.carDeadline}?`,
+    `Esta pergunta aparece porque o imóvel possuía até quatro módulos fiscais em 22/07/2008 e a vegetação nativa existente atualmente dentro dos limites analisados é inferior a 20%. A elegibilidade temporal ao PRA é então verificada antes de aplicar o art. 67.`,
+    `setCarPrazo(true)`,
+    `setCarPrazo(false)`,
+    `O imóvel mantém elegibilidade temporal para a análise do art. 67.`,
+    `A ferramenta aplicará a regra permanente de 20%.`
+  )
+}
+else if(current==='vegAtualArt67')c.innerHTML=numeric(
+  A.modo==='unificacao'
+    ?`Qual é a área de vegetação nativa existente atualmente dentro dos limites do imóvel de origem ${A.origemAtual}?`
+    :'Qual é a área de vegetação nativa existente atualmente no imóvel analisado?',
+  A.modo==='unificacao'
+    ?'Considere somente a vegetação nativa atualmente existente dentro dos limites desta origem, ainda que ela hoje integre um CAR unificado. Se esse remanescente atingir 20% ou mais da área analisada, a ferramenta não utilizará o art. 67.'
+    :'Este é o teste do remanescente atual. Se a vegetação nativa existente hoje atingir 20% ou mais da área analisada, a ferramenta aplicará a regra permanente e não utilizará o art. 67. Se for inferior a 20%, serão verificados os demais requisitos do dispositivo.',
+  'vegAtualArt67','Ex.: 2,00','saveVegAtualArt67()','Vegetação nativa atual (ha)',true
+);
+else if(current==='veg2008')c.innerHTML=numeric(
+  A.modo==='unificacao'
+    ?`Qual era a área de vegetação nativa existente em 22/07/2008 dentro dos limites do imóvel de origem ${A.origemAtual}?`
+    :'Qual era a área de vegetação nativa existente em 22/07/2008 dentro dos limites do imóvel atualmente analisado?',
+  A.modo==='unificacao'
+    ?'Não informe a vegetação total do imóvel maior existente naquela data. Considere apenas a vegetação que, em 22/07/2008, estava espacialmente localizada dentro dos limites desta origem. Essa área definirá a quantidade e a localização da Reserva Legal pelo art. 67.'
+    :'Não informe a vegetação total de eventual imóvel maior existente naquela data. Considere somente a vegetação que, em 22/07/2008, estava espacialmente localizada dentro dos limites do imóvel que está sendo analisado agora. Pelo art. 67, essa área será a referência quantitativa e espacial da Reserva Legal.',
+  'veg2008','Ex.: 3,50','saveVeg2008()','Vegetação em 22/07/2008 nos limites analisados (ha)',true
+);
+else if(current==='art67Localizacao'){
+  const maxPreservada=Math.min(Number(S.veg2008||0),Number(S.vegAtualTotalArt67||0));
+  c.innerHTML=numeric(
+    `Dos ${fmt(S.veg2008)} ha que possuíam vegetação nativa em 22/07/2008 dentro dos limites analisados, quantos hectares permanecem atualmente vegetados nos mesmos locais?`,
+    `Informe somente a parcela da vegetação histórica que ainda coincide espacialmente com vegetação nativa atual. O imóvel possui atualmente ${fmt(S.vegAtualTotalArt67)} ha de vegetação nativa no total; portanto, neste caso, o valor informado não pode superar ${fmt(maxPreservada)} ha. Vegetação atual localizada fora das áreas vegetadas em 22/07/2008 não substitui, por si só, a localização histórica da Reserva Legal do art. 67.`,
+    'veg2008PreservadaAtual',
+    `Ex.: ${fmt(maxPreservada)}`,
+    'saveVeg2008PreservadaAtual()',
+    'Vegetação histórica ainda preservada na mesma localização (ha)',
+    true
+  );
+}
+else if(current==='vegAtualComplemento')c.innerHTML=numeric('Qual é a área de vegetação nativa atualmente disponível para complementar a Reserva Legal?','Informe somente a vegetação nativa que ainda não está contabilizada na Reserva Legal averbada ou aprovada. Esta pergunta aparece quando a ferramenta não consegue calcular essa diferença automaticamente com segurança. Não inclua APP que será utilizada especificamente pelo cômputo do art. 15. Déficit calculado: '+fmt(S.deficit)+' ha.','vegAtual','Ex.: 3,20','saveVegAtualComplemento()','Vegetação nativa disponível (ha)',true);
+else if(current==='appComputavel')c.innerHTML=numeric('Qual é a área de APP que pode ser computada no percentual da Reserva Legal?','O art. 15 admite o cômputo da APP quando ela está conservada ou em processo de recuperação, sem possibilitar nova conversão de vegetação nativa. Na representação do CAR, a parcela usada no cômputo deve ser também demarcada como Reserva Legal. Saldo após a vegetação disponível: '+fmt(S.deficitAposVeg)+' ha.','appArea','Ex.: 1,80','saveApp()','APP conservada ou em recuperação (ha)',true);
+else if(current==='readequacao')c.innerHTML=yn('A divergência decorre de medição georreferenciada mais precisa que demonstrou área real menor, sem decorrer de desmembramento?','A IN Idaf nº 005/2020 admite readequação quando a correção decorre de medição georreferenciada de maior precisão; a redução não se aplica quando a diferença decorre de desmembramento.','markReadequacao(true)','markReadequacao(false)','Pode caracterizar readequação da RL.','Será verificada hipótese de realocação.');
+else if(current==='erroMaiorValor')c.innerHTML=yn('Foi constatado erro na demarcação anterior e existe, dentro do próprio imóvel, área de maior valor ecológico para receber a Reserva Legal?','Essa é uma hipótese específica de realocação prevista na IN Idaf nº 005/2020.','markErroMaior(true)','markErroMaior(false)','Há erro anterior e alternativa interna ecologicamente superior.','Essa hipótese não foi caracterizada.');
+else if(current==='vegInternaErro')c.innerHTML=numeric('Qual é a área de vegetação nativa disponível nessa alternativa interna de maior valor ecológico?','Para essa hipótese, a realocação deve ocorrer dentro do próprio imóvel. Área da RL averbada ou aprovada vinculada ao imóvel atual: '+fmt(S.rlSobreposicaoAtual)+' ha.','vegIntErro','Ex.: 5,00','saveVegInternaErro()','Vegetação interna disponível (ha)',true);
+else if(current==='inviabilidade')c.innerHTML=yn('Existe inviabilidade técnica comprovada para formação ou recuperação florestal na área anteriormente demarcada?','A IN Idaf nº 005/2020 prevê essa situação como hipótese de realocação. Nos casos admitidos, eventual compensação somente é analisada depois de destinada à Reserva Legal toda a vegetação nativa existente no próprio imóvel.','markInviabilidade(true)','markInviabilidade(false)','Há inviabilidade técnica comprovada.','Essa hipótese não foi comprovada.');
+else if(current==='recuperacaoNaoIniciada')c.innerHTML=yn('A recuperação da área anteriormente demarcada ainda não foi iniciada?','A não iniciação da recuperação é outra hipótese prevista na IN Idaf nº 005/2020 para análise de realocação.','markRecuperacao(true)','markRecuperacao(false)','A recuperação ainda não foi iniciada.','A recuperação já foi iniciada ou a hipótese não se aplica.');
+else if(current==='vegInternaComp')c.innerHTML=numeric('Qual é a área de vegetação nativa disponível dentro do próprio imóvel para receber a Reserva Legal?','Antes de compensar em outro imóvel, deve ser destinada à Reserva Legal toda a vegetação nativa existente no próprio imóvel. Área da RL averbada ou aprovada vinculada ao imóvel atual: '+fmt(S.rlSobreposicaoAtual)+' ha.','vegIntComp','Ex.: 2,50','saveVegInternaComp()','Vegetação interna disponível (ha)',true);
+
+else if(current==='result_manter_rl')c.innerHTML=result('Reserva Legal averbada/aprovada','Manter a Reserva Legal averbada/aprovada vinculada ao imóvel','A Reserva Legal existente deve permanecer vinculada ao imóvel e ser considerada na análise quantitativa da área exigível.','A mera existência de Reserva Legal averbada/aprovada não dispensa automaticamente o imóvel atual de atender à referência aplicável.',['Manter a parcela da Reserva Legal que sobrepõe o imóvel atual: <b>'+fmt(S.rlSobreposicaoAtual)+' ha</b>.','Calcular a Reserva Legal exigível para o imóvel atual e complementar quando necessário.','Representar no CAR a localização compatível com o ato anterior.'],'A dispensa de complementação por desmembramento exige descendência exclusiva do imóvel de origem, RL de pelo menos 20% naquele imóvel e área atual inferior à área de origem.');
+else if(current==='result_dispensa_desmembramento')c.innerHTML=result('Desmembramento comprovado','Dispensa de complementação pela origem do imóvel','A Reserva Legal do imóvel de origem correspondia a pelo menos 20% e o imóvel atual descende exclusivamente daquele imóvel por desmembramento, sem unificação, remembramento ou incorporação posterior de outras áreas.','A dispensa de complementação decorre da combinação de dois fatores: <b>(1)</b> Reserva Legal averbada/aprovada correspondente a pelo menos 20% no imóvel de origem; e <b>(2)</b> descendência exclusiva do imóvel atual por desmembramento, com área atual inferior à área do imóvel de origem.',['Manter a parcela da Reserva Legal averbada/aprovada que recai sobre o imóvel atual: <b>'+fmt(S.rlSobreposicaoAtual||0)+' ha</b>.','Não exigir complementação apenas para que essa parcela alcance 20% da área atual.','Manter documentada a cadeia dominial que demonstra a origem exclusivamente por desmembramento.'],'A dispensa não decorre simplesmente da existência de uma averbação anterior. Se o imóvel tiver recebido área por unificação, remembramento ou incorporação, esta regra não se aplica.','info');
+else if(current==='result_dispensa_desmembramento_art67')c.innerHTML=result('Desmembramento + art. 67','Não há complementação: dois enquadramentos foram identificados','Além de descender exclusivamente de imóvel cuja Reserva Legal averbada/aprovada correspondia a pelo menos 20%, o imóvel também atende aos requisitos analisados para o art. 67.','A ausência de complementação é sustentada pela situação registral do desmembramento e, adicionalmente, pelo enquadramento no art. 67. A dispensa por desmembramento decorre da combinação entre RL ≥ 20% no imóvel de origem e descendência exclusiva do imóvel atual.',['Manter a parcela da Reserva Legal averbada/aprovada que recai sobre o imóvel atual: <b>'+fmt(S.rlSobreposicaoAtual||0)+' ha</b>.','Registrar que a referência quantitativa apurada pelo art. 67 é de <b>'+fmt(S.target)+' ha</b>.','Não reduzir ou deslocar áreas protegidas apenas porque existem dois fundamentos que afastam a complementação.'],'Se houver necessidade de utilizar espacialmente o art. 67, permanecem aplicáveis as regras relativas à localização da vegetação existente em 22/07/2008.','info');
+else if(current==='result_dispensa_desmembramento_recuperar')c.innerHTML=result('Desmembramento comprovado','Sem complementação, mas com recuperação da Reserva Legal averbada/aprovada','O imóvel se enquadra na dispensa de complementação por descendência exclusiva de desmembramento, porém foi informada supressão posterior na parcela da Reserva Legal averbada/aprovada que recai sobre o imóvel atual.','A dispensa quantitativa de complementação não elimina a obrigação de manter e recuperar a Reserva Legal averbada/aprovada existente no imóvel.',['Não exigir complementação apenas para atingir 20% da área atual.','Recuperar a parcela da Reserva Legal averbada/aprovada afetada pela supressão: <b>'+fmt(S.rlSobreposicaoAtual||0)+' ha</b>.','Manter a cadeia dominial e os elementos que comprovam a origem por desmembramento.'],'A supressão posterior não autoriza deslocar ou eliminar a obrigação incidente sobre a Reserva Legal averbada/aprovada.','bad');
+else if(current==='result_dispensa_desmembramento_recuperar_art67')c.innerHTML=result('Desmembramento + art. 67','Sem complementação, com recuperação da área vinculada','O imóvel reúne a dispensa de complementação pela origem exclusiva por desmembramento e também os requisitos analisados do art. 67, mas existe supressão posterior na Reserva Legal averbada/aprovada que recai sobre o imóvel atual.','A ausência de complementação decorre da combinação das condições do desmembramento e do enquadramento adicional no art. 67; a obrigação de recuperar a área averbada ou aprovada permanece.',['Recuperar a parcela da Reserva Legal averbada/aprovada afetada: <b>'+fmt(S.rlSobreposicaoAtual||0)+' ha</b>.','Registrar a referência do art. 67: <b>'+fmt(S.target)+' ha</b>.','Não utilizar o art. 67 ou a regra de desmembramento para afastar a recuperação da área anteriormente vinculada.'],'Se o art. 67 for utilizado para definir localização de área adicional, a vegetação de 22/07/2008 permanece a referência espacial.','bad');
+else if(current==='result_dispensa_desmembramento_preservada')c.innerHTML=result('Desmembramento comprovado','Sem complementação; preservar a Reserva Legal averbada/aprovada','A parcela da Reserva Legal averbada/aprovada permanece preservada, e o imóvel se enquadra na dispensa de complementação pela origem exclusiva por desmembramento.','A área preservada continua vinculada à Reserva Legal. A dispensa de complementação decorre da RL de pelo menos 20% no imóvel de origem combinada com a descendência exclusiva do imóvel atual.',['Preservar a parcela de <b>'+fmt(S.rlSobreposicaoAtual||0)+' ha</b> existente no imóvel atual.','Corrigir eventual divergência cartográfica sem liberar a vegetação protegida.','Não exigir complementação apenas para atingir 20% da área atual.'],'A dispensa quantitativa não é autorização para converter a Reserva Legal averbada/aprovada que permanece preservada.','warn');
+else if(current==='result_dispensa_desmembramento_preservada_art67')c.innerHTML=result('Desmembramento + art. 67','Sem complementação; manter a área preservada','O imóvel se enquadra na dispensa por descendência exclusiva de desmembramento e também nos requisitos analisados do art. 67. A parcela da Reserva Legal averbada/aprovada permanece preservada.','Os dois enquadramentos afastam a necessidade de complementação, mas não afastam a proteção da Reserva Legal averbada/aprovada já existente.',['Preservar a parcela de <b>'+fmt(S.rlSobreposicaoAtual||0)+' ha</b>.','Registrar a referência quantitativa do art. 67: <b>'+fmt(S.target)+' ha</b>.','Corrigir eventual inconsistência espacial sem liberar a área vegetada.'],'Se houver uso do art. 67 para definir área adicional, a vegetação existente em 22/07/2008 continua sendo a referência de localização.','warn');
+else if(current==='result_recuperar_rl')c.innerHTML=result('Reserva Legal desmatada','Recuperar a Reserva Legal averbada/aprovada; não realocar para afastar a obrigação','Foi informada supressão posterior à constituição da Reserva Legal na parcela que recai sobre o imóvel atual.','A área continua vinculada à destinação de Reserva Legal e a ferramenta não utiliza a retificação como mecanismo para liberar área posteriormente desmatada.',['Manter como referência a parcela da RL averbada/aprovada de <b>'+fmt(S.rlSobreposicaoAtual)+' ha</b>.','Promover a recuperação/regularização da área conforme o caso.','Apurar a supressão com imagens históricas, matrícula e demais elementos técnicos.'],'A data e a extensão da supressão precisam ser comprovadas no processo.','bad');
+else if(current==='result_rl_preservada')c.innerHTML=result('Reserva Legal preservada','Manter a Reserva Legal que permanece preservada','A parcela da Reserva Legal averbada/aprovada dentro do imóvel atual permanece preservada. Ainda que exista divergência de representação, a ferramenta não considera essa área disponível para retificação apenas para liberar a área protegida.','Ajustes cartográficos podem ser necessários, mas a vegetação correspondente à Reserva Legal preservada deve ser mantida.',['Preservar a vegetação existente na parcela da RL averbada/aprovada.','Corrigir eventual problema de georreferenciamento ou correspondência documental sem deslocar a obrigação para liberar a área vegetada.'],'Retificação e correção cartográfica não devem ser confundidas com autorização para conversão da Reserva Legal preservada.','warn');
+else if(current==='result_readequacao'){let extra=S.rlOriginalDeficiente?` Como a RL original era inferior a 20%, permanece também a necessidade de verificar complementação até ${fmt(S.target)} ha (${S.targetBasis==='art67'?'art. 67':'regra de 20%'}).`:'';c.innerHTML=result('IN Idaf nº 005/2020','Retificação da Reserva Legal por readequação de medição','A divergência foi atribuída a medição georreferenciada de maior precisão que demonstrou área real menor, sem desmembramento.'+extra,'A IN Idaf nº 005/2020 admite readequação nessa hipótese e ressalva que a redução da área de RL não se aplica quando a diferença decorre de desmembramento.',['Documentar a medição de maior precisão e a área real do imóvel.','Recalcular a área de RL conforme a situação corrigida e submeter a retificação ao procedimento aplicável.'],'A redução não é automática: deve decorrer da correção técnica da área real e ser formalmente analisada.');}
+else if(current==='result_realocacao_interna_erro')c.innerHTML=result('Retificação da Reserva Legal','Retificar a Reserva Legal para área interna de maior valor ecológico','Foi caracterizado erro na demarcação anterior e há vegetação nativa interna suficiente para receber a parcela da Reserva Legal averbada/aprovada.','IN Idaf nº 005/2020 — hipótese de realocação por erro na demarcação anterior com alternativa de maior valor ecológico dentro do próprio imóvel.',withRetifExtra(['Demarcar no novo croqui pelo menos <b>'+fmt(S.rlSobreposicaoAtual)+' ha</b> de Reserva Legal na nova localização.','Formalizar a retificação e observar os critérios de localização do art. 14 da Lei nº 12.651/2012.']),'A área escolhida deve possuir valor ecológico equivalente ou superior e atender aos critérios ambientais aplicáveis.');
+else if(current==='result_realocacao_interna')c.innerHTML=result('Retificação da Reserva Legal','Retificar a Reserva Legal utilizando primeiro a vegetação nativa do próprio imóvel','A hipótese de realocação foi caracterizada e há vegetação nativa interna suficiente para receber toda a parcela da Reserva Legal averbada/aprovada vinculada ao imóvel atual.','IN Idaf nº 005/2020 — nas hipóteses de realocação admitidas, a vegetação nativa existente no próprio imóvel deve ser destinada à Reserva Legal antes de eventual compensação.',withRetifExtra(['Demarcar no novo croqui <b>'+fmt(S.rlSobreposicaoAtual)+' ha</b> de Reserva Legal sobre vegetação nativa existente no próprio imóvel.','Formalizar a alteração pelo procedimento de retificação aplicável.']),'A nova localização deve observar os critérios legais de alocação da Reserva Legal.');
+else if(current==='result_realocacao_compensacao'){const saldo=Math.max(0,S.rlSobreposicaoAtual-S.vegInternaRetificacao);c.innerHTML=result('Retificação + compensação','Retificar a Reserva Legal no imóvel e compensar somente o saldo','A vegetação nativa existente no imóvel é insuficiente para receber toda a parcela da RL averbada/aprovada. Nas hipóteses da IN que admitem compensação, usa-se primeiro toda a vegetação nativa interna e compensa-se o saldo.','IN Idaf nº 005/2020 — compensação nas hipóteses admitidas após destinação da vegetação nativa existente no próprio imóvel.',withRetifExtra(['Demarcar no croqui <b>'+fmt(S.vegInternaRetificacao)+' ha</b> de Reserva Legal sobre vegetação nativa existente no próprio imóvel.','Compensar <b>'+fmt(saldo)+' ha</b> de Reserva Legal em imóvel doador.','Verificar os requisitos do art. 66 para a área compensadora.']),'A área de compensação deve atender aos requisitos legais de extensão, bioma e localização.');}
+else if(current==='result_compensacao_total')c.innerHTML=result('Compensação','Retificar a Reserva Legal com compensação em imóvel doador','Não foi informada vegetação nativa disponível dentro do próprio imóvel para receber a parcela da RL averbada/aprovada, e foi caracterizada hipótese da IN que admite compensação.','IN Idaf nº 005/2020 combinada com as regras de compensação do art. 66 da Lei nº 12.651/2012.',withRetifExtra(['Compensar <b>'+fmt(S.rlSobreposicaoAtual)+' ha</b> de Reserva Legal em imóvel doador.','Selecionar área apta e formalizar a vinculação da compensação conforme a legislação.']),'A compensação não autoriza nova conversão de vegetação nativa e depende do atendimento dos requisitos legais.');
+else if(current==='result_sem_hipotese_retificacao')c.innerHTML=result('Retificação','Não foi identificada hipótese de realocação','A área da Reserva Legal averbada/aprovada não está vegetada, mas as respostas não caracterizaram as hipóteses de realocação examinadas pela IN Idaf nº 005/2020.','A retificação não é automática apenas porque a Reserva Legal averbada/aprovada não coincide com a situação atual.',withRetifExtra(['Manter a obrigação vinculada à Reserva Legal anterior.','Revisar documentos e elementos técnicos se houver outra circunstância relevante que altere o enquadramento.']),'Sem hipótese normativa comprovada, a ferramenta não recomenda realocação.','warn');
+else if(current==='result_sem_complemento')c.innerHTML=result(S.targetBasis==='art67'?'Art. 67':'Reserva Legal','Não há complementação adicional de área','A área de Reserva Legal já contabilizada atinge ou supera a referência aplicável ao imóvel.','Referência calculada: <b>'+fmt(S.target)+' ha</b> — '+(S.targetBasis==='art67'?'art. 67, como benefício do PRA-ES.':'20% da área atual, pela regra permanente do art. 12.') ,['Manter a área já vinculada à Reserva Legal.','Não reduzir eventual Reserva Legal averbada/aprovada apenas porque a referência calculada é menor.'],'A ferramenta considera o situação da Reserva Legal averbada/aprovada e não transforma o cálculo em autorização automática para redução.');
+else if(current==='result_recuperar_sem_complemento')c.innerHTML=result('Recuperação da RL','Recuperar a Reserva Legal averbada/aprovada, sem complemento adicional','A parcela da Reserva Legal averbada/aprovada já alcança a referência quantitativa aplicável, mas foi informada supressão posterior ao ato.','A obrigação principal é recuperar a Reserva Legal averbada/aprovada; não há, pelo cálculo realizado, necessidade de acrescentar nova área além dela.',['Recuperar <b>'+fmt(S.rlSobreposicaoAtual)+' ha</b> da parcela da RL averbada/aprovada.','Manter a destinação de Reserva Legal e apurar a supressão.'],'A inexistência de déficit quantitativo não elimina a obrigação de recuperar a área de RL degradada.','bad');
+else if(current==='result_preservada_sem_complemento')c.innerHTML=result('RL preservada','Preservar a Reserva Legal averbada/aprovada; não há complemento adicional','A parcela da Reserva Legal averbada/aprovada preservada já alcança a referência quantitativa aplicável ao imóvel.','A área preservada deve continuar vinculada à Reserva Legal, ainda que exista divergência de representação.',['Manter a vegetação da RL averbada/aprovada.','Corrigir eventual inconsistência cartográfica sem liberar a área protegida.'],'Não há fundamento para reduzir uma RL preservada apenas porque a referência mínima calculada seria menor.','warn');
+else if(current==='result_art67_local_preservada'){
+  let a=[];
+  if(S.contextNote==='recover_and_complement')a.push('Recuperar também a parcela da Reserva Legal averbada/aprovada que sofreu supressão posterior ao ato.');
+  if(S.contextNote==='preserved_mismatch_and_complement')a.push('Manter preservada a parcela da Reserva Legal averbada/aprovada já vinculada ao imóvel.');
+  a.push('Vegetação nativa existente atualmente no imóvel: <b>'+fmt(S.vegAtualTotalArt67)+' ha</b>.');
+  a.push('Vegetação nativa existente em 22/07/2008 dentro dos limites analisados: <b>'+fmt(S.veg2008)+' ha</b>.');
+  a.push('Vegetação nativa de 22/07/2008 que permanece preservada na mesma localização: <b>'+fmt(S.veg2008PreservadaAtual)+' ha</b>.');
+  a.push('Demarcar no croqui <b>'+fmt(S.target)+' ha</b> de Reserva Legal sobre a vegetação nativa existente em <b>22/07/2008</b>, na mesma localização.');
+  a.push('Reserva Legal a recuperar nessa demarcação: <b>0,00 ha</b>.');
+  c.innerHTML=result(
+    'Art. 67 — localização vinculada',
+    'Demarcar a Reserva Legal sobre a vegetação existente em 22/07/2008',
+    'Toda a vegetação nativa existente em 22/07/2008 utilizada como referência do art. 67 permanece preservada na mesma localização.',
+    'A referência permanente de 20% seria de <b>'+fmt(S.areaAtual*0.20)+' ha</b>. Como o imóvel se enquadra no art. 67, a referência aplicável passa a ser <b>'+fmt(S.target)+' ha</b>, correspondente à vegetação existente em 22/07/2008 dentro dos limites analisados.',
+    a,
+    'A vegetação regenerada posteriormente em outros locais não altera a localização definida pelo art. 67 enquanto o imóvel depender desse dispositivo.',
+    'info'
+  );
+}
+else if(current==='result_art67_local_suprimida'){
+  let a=[];
+  if(S.contextNote==='recover_and_complement')a.push('Recuperar também a parcela da Reserva Legal averbada/aprovada que sofreu supressão posterior ao ato.');
+  if(S.contextNote==='preserved_mismatch_and_complement')a.push('Manter preservada a parcela da Reserva Legal averbada/aprovada já vinculada ao imóvel.');
+  a.push('Vegetação nativa existente atualmente no imóvel: <b>'+fmt(S.vegAtualTotalArt67)+' ha</b>.');
+  a.push('Vegetação nativa existente em 22/07/2008 dentro dos limites analisados: <b>'+fmt(S.veg2008)+' ha</b>.');
+  a.push('Vegetação nativa de 22/07/2008 que permanece preservada na mesma localização: <b>'+fmt(S.veg2008PreservadaAtual)+' ha</b>.');
+  a.push('Demarcar no croqui <b>'+fmt(S.target)+' ha</b> de Reserva Legal na localização da vegetação nativa existente em <b>22/07/2008</b>.');
+  a.push('Recuperar <b>'+fmt(S.veg2008Recuperar)+' ha</b> da Reserva Legal demarcada que atualmente não possui vegetação nativa.');
+  c.innerHTML=result(
+    'Art. 67 — recuperação na localização histórica',
+    'Demarcar a Reserva Legal na localização de 22/07/2008 e recuperar a parcela atualmente sem vegetação',
+    'Parte da vegetação nativa existente em 22/07/2008 não permanece preservada na mesma localização. Essa área continua integrando a demarcação da Reserva Legal e deverá ser recuperada.',
+    'A referência permanente de 20% seria de <b>'+fmt(S.areaAtual*0.20)+' ha</b>. Como o imóvel se enquadra no art. 67, a referência aplicável é de <b>'+fmt(S.target)+' ha</b>, correspondente à vegetação nativa existente em 22/07/2008 dentro dos limites analisados. Desses, <b>'+fmt(S.veg2008PreservadaAtual)+' ha</b> permanecem preservados na mesma localização e <b>'+fmt(S.veg2008Recuperar)+' ha</b> deverão ser recuperados.',
+    a,
+    'Vegetação nativa atual situada fora das áreas que possuíam vegetação nativa em 22/07/2008 não substitui automaticamente a área que deverá ser recuperada. A localização da vegetação nativa de 22/07/2008 permanece como referência enquanto o imóvel depender do art. 67.',
+    'bad'
+  );
+}
+else if(current==='result_dados_inconsistentes_vegetacao')c.innerHTML=result('Dados inconsistentes','Revise a área de vegetação nativa atual','A área total de vegetação nativa informada é menor que a área da Reserva Legal averbada/aprovada declarada como preservada. Esses dados não podem ser simultaneamente verdadeiros.','A ferramenta interrompe o cálculo automático para evitar produzir um diagnóstico com áreas incompatíveis.',['Conferir a área total de vegetação nativa atual.','Conferir a área da Reserva Legal averbada/aprovada que efetivamente recai sobre o imóvel atual.','Confirmar se toda essa Reserva Legal permanece realmente vegetada.'],'Após corrigir os dados, refaça a análise.','bad');
+else if(current==='result_complemento_vegetacao'){
+  const auto=S.vegAtualComplementoAuto;
+  const lead=auto
+    ?'A vegetação nativa disponível para complementação foi calculada automaticamente a partir da vegetação nativa atual total, descontando a área já contabilizada na Reserva Legal averbada/aprovada preservada.'
+    :'Após considerar a Reserva Legal já contabilizada, a vegetação nativa disponível no próprio imóvel é suficiente para completar a referência calculada.';
+  let actions=[];
+  if(auto){
+    actions.push('Vegetação nativa atual total: <b>'+fmt(S.vegAtualTotalArt67)+' ha</b>.');
+    actions.push('Vegetação já contabilizada na Reserva Legal averbada/aprovada: <b>'+fmt(S.vegAtualJaContabilizada||0)+' ha</b>.');
+    actions.push('Vegetação adicional disponível calculada: <b>'+fmt(S.vegAtualComplemento)+' ha</b>.');
+  }
+  actions.push('Demarcar como Reserva Legal a área necessária para completar <b>'+fmt(S.target)+' ha</b>.');
+  actions.push('Déficit remanescente após a complementação: <b>0,00 ha</b>.');
+  c.innerHTML=result(
+    S.targetBasis==='art67'?'Art. 67 / complementação':'Complementação da RL',
+    'A vegetação nativa existente é suficiente para atender à Reserva Legal',
+    lead,
+    'Referência total: <b>'+fmt(S.target)+' ha</b>. Área já contabilizada: <b>'+fmt(S.existingCredit)+' ha</b>. Complementação necessária: <b>'+fmt(S.deficit)+' ha</b>.',
+    actions,
+    S.targetBasis==='art67'
+      ?'O percentual inferior a 20% é tratado aqui como benefício do PRA-ES, conforme IN Idaf nº 011/2023.'
+      :'A regra geral utilizada é 20% da área atual.'
+  );
+}
+else if(current==='result_complemento_app'){const uso=Math.max(0,S.deficitAposVeg);let a=[];if(S.vegAtualComplementoAuto){a.push('Vegetação nativa atual total: <b>'+fmt(S.vegAtualTotalArt67)+' ha</b>.');a.push('Vegetação já contabilizada na RL averbada/aprovada: <b>'+fmt(S.vegAtualJaContabilizada||0)+' ha</b>.');a.push('Vegetação adicional disponível calculada: <b>'+fmt(S.vegAtualComplemento)+' ha</b>.')}else{a.push('Usar a vegetação nativa disponível: <b>'+fmt(S.vegAtualComplemento)+' ha</b>.')}a.push('Demarcar no croqui aproximadamente <b>'+fmt(uso)+' ha</b> de Reserva Legal sobre APP preservada ou em recuperação.');a.push('A APP utilizada no cômputo deve constar também na demarcação da Reserva Legal no croqui.');a.push('Manter a APP preservada ou em recuperação, conforme a situação existente.');c.innerHTML=result('Art. 15','Usar APP no cômputo para completar a Reserva Legal','A vegetação nativa disponível fora da APP não foi suficiente, mas a APP conservada ou em processo de recuperação informada permite atingir a referência de Reserva Legal.','O art. 15 da Lei nº 12.651/2012 admite o cômputo de APP no percentual da RL quando não houver nova conversão, a APP estiver conservada ou em recuperação e o imóvel estiver inscrito no CAR.',a,'O regime de proteção da APP não muda porque ela foi computada na Reserva Legal. O cômputo também não pode viabilizar nova conversão de vegetação nativa.','info');}
+else if(current==='result_deficit_remanescente'){const resto=Math.max(0,S.deficitAposVeg-(S.appComputavel||0));let a=[];if(S.vegAtualComplementoAuto){a.push('Vegetação nativa atual total: <b>'+fmt(S.vegAtualTotalArt67)+' ha</b>.');a.push('Vegetação já contabilizada na RL averbada/aprovada: <b>'+fmt(S.vegAtualJaContabilizada||0)+' ha</b>.');a.push('Vegetação adicional disponível calculada: <b>'+fmt(S.vegAtualComplemento)+' ha</b>.')}else{a.push('Vegetação nativa para complemento: <b>'+fmt(S.vegAtualComplemento)+' ha</b>.')}a.push('APP preservada ou em recuperação utilizada no cômputo: <b>'+fmt(S.appComputavel)+' ha</b>.');a.push('Saldo estimado ainda não atendido: <b>'+fmt(resto)+' ha</b>.');a.push('Atender o saldo por recuperação no próprio imóvel, compensação em imóvel doador ou combinação das alternativas legalmente admitidas.');c.innerHTML=result('Regularização da RL','Ainda existe déficit após vegetação nativa e APP computável','Mesmo utilizando a vegetação nativa disponível e a APP conservada/em recuperação, permanece saldo de Reserva Legal a regularizar.','O art. 15 permite o cômputo da APP; o saldo restante segue as formas de regularização do art. 66, quando aplicável.',a,'A APP usada no cômputo deve permanecer conservada ou em recuperação e continua sujeita ao regime próprio de APP.','warn');}
+
+if(current==='result_regra_geral')c.innerHTML=result('Reserva Legal','Aplicar a referência calculada','A ferramenta definiu a referência quantitativa de Reserva Legal conforme os dados informados.','Referência: <b>'+fmt(S.target)+' ha</b>.',['Prosseguir com a demarcação e verificar a vegetação disponível no imóvel.'],'Confira os dados antes de concluir.');
+if(current==='result_unificacao')c.innerHTML=mergeSummaryHTML();
+persistSession();
+if(autoScroll)setTimeout(scrollPanel,0);
+}
+
+function goBack(){if(!history.length)return;const h=history.pop();Object.keys(S).forEach(k=>S[k]=h.state[k]);current=h.current;crumbs=[...h.crumbs];render();scrollPanel()}
+function restart(){
+  clearStoredSession();
+  resetS();
+  A={modo:null,origens:[],origemAtual:1};
+  current='apresentacao';
+  history=[];
+  crumbs=[];
+  document.getElementById('mobileSummary').open=false;
+  render();
+  scrollPanel();
+}
+
+// Corrige um erro de digitação em propriedade usada apenas na renderização de fatos sem alterar a lógica.
+Object.defineProperty(S,'deseMembrouAposRL',{get(){return S.desmembrouAposRL},set(v){S.desmembrouAposRL=v},configurable:true});
+restoreSession();
+render();
+</script>
+</body>
+</html>
